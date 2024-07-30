@@ -245,9 +245,30 @@
   <!-- 尾部用户自定义相关内容 -->
 
   
-    <canvas class="click" style="position: fixed;left: 0;top: 0;z-index: 7; pointer-events: none;" ></canvas> 
-    <script type="text/javascript" src="/js/firework.js"></script>
-    <script src="/js/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mouse-firework@latest/dist/index.umd.js"></script>
+    <script>
+      firework({
+      excludeElements: ["a"],
+      particles: [
+        {
+          shape: "circle",
+          move: ["emit"],
+          easing: "easeOutExpo",
+          colors: [
+            "rgba(255,182,185,.9)",
+            "rgba(250,227,217,.9)",
+            "rgba(187,222,214,.9)",
+            "rgba(138,198,209,.9)",
+          ],
+          number: 30,
+          duration: [1200, 1800],
+          shapeOptions: {
+            radius: [16, 32],
+          },
+        },
+      ],
+    });
+    </script>
   
 </body>
 </html>
