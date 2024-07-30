@@ -22,7 +22,7 @@
 
   
 
-  <title>Hello World | 蹦蹦小圆帽の部落格</title>
+  <title>微信偷偷上传日志行为分析 | 蹦蹦小圆帽の部落格</title>
 
   
 
@@ -99,18 +99,26 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">Hello World</h1>
+          <h1 class="title-wrap">微信偷偷上传日志行为分析</h1>
           <h2 class="title-sub-wrap">
             <strong>蹦蹦小圆帽</strong>
             <span>发布于</span>
-            <time  class="article-date" datetime="2024-07-29T10:02:12.034Z" itemprop="datePublished">2024-07-29</time>
+            <time  class="article-date" datetime="2024-07-30T02:59:24.000Z" itemprop="datePublished">2024-07-30</time>
           </h2>
           
           
           <ul class="wrap-list dark">
   
+    <li><a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">📒 信息安全</a></li>
+    
 </ul>
           <ul class="wrap-list dark">
+  
+    <li><a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">🏷️ 信息安全</a></li>
+  
+    <li><a href="/tags/%E9%9A%90%E7%A7%81/">🏷️ 隐私</a></li>
+  
+    <li><a href="/tags/%E7%A4%BE%E4%BA%A4%E7%BD%91%E7%BB%9C/">🏷️ 社交网络</a></li>
   
 </ul>
         </div>
@@ -134,25 +142,39 @@
       
       
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+        <h1 id="微信偷偷上传日志行为分析"><a href="#微信偷偷上传日志行为分析" class="headerlink" title="微信偷偷上传日志行为分析"></a>微信偷偷上传日志行为分析</h1><h2 id="分析微信行为"><a href="#分析微信行为" class="headerlink" title="分析微信行为"></a>分析微信行为</h2><blockquote>
+<p>传说，在遥远的<code>~/Library/Containers/com.tencent.xinWeChat/Data/Library/Caches/com.tencent.xinWeChat/2.0b4.0.9/log</code>，住着一群野生的日志……</p>
+</blockquote>
+<img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/xlog_folder.png" class="" title="微信的神秘日志文件夹">
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>那些日志由微信生成，记录着你的生辰八字（bushi</p>
+</blockquote>
+<p>曾经看到过一篇博文，上面提到了某个微信用户发现自己Mac上的微信占用空间高达几GB，甚至会有1GB多的神秘的加密日志隐藏在窑不可测的深处</p>
+<p>为了验证事件的真实性，这里按照那位博主使用的Xcode自带的Instruments工具</p>
+<img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/xcode_instruments_startup.png" class="" title="Instruments启动！">
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>选择File Activity，在Running Application中选择WeChat.app，然后记录大概几分钟</p>
+<img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/select_wechat.png" class="" title="选择WeChat.app">
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>输入密码开始监控，在此期间我们把微信软件保持后台静默，差不多五分钟后我们停止Record等待Analyze结束后我们简单过滤一下<code>xlog</code>字样</p>
+<img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/search_xlog.png" class="" title="过滤xlog">
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>由于我这里已经将其权限禁止了所以这里会提示无权限</p>
+<p>为了安全起见我们还是需要禁止微信记录这些神秘的日志文件</p>
+<h2 id="限制微信偷传数据"><a href="#限制微信偷传数据" class="headerlink" title="限制微信偷传数据"></a>限制微信偷传数据</h2><p>从上面我们可以看到，即使微信保持后台静默，它仍然会生成加密的xlog文件，并上传至腾讯的服务器。由于其已经加密，已经无法得知具体包含了什么信息，为了保护隐私，我们可以通过禁止微信对log目录的读写权限来防止微信记录日志：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm -rf ~/Library/Containers/com.tencent.xinWeChat/Data/Library/Caches/com.tencent.xinWeChat/2.0b4.0.9/log/*</span><br><span class="line">sudo chmod 400 ~/Library/Containers/com.tencent.xinWeChat/Data/Library/Caches/com.tencent.xinWeChat/2.0b4.0.9/log</span><br></pre></td></tr></table></figure>
+
+<img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/prevent_log.png" class="" title="修改权限">
+
+<p>大功告成～</p>
 
       </section>
 
       
       
         <nav class="article-nav">
+          
           
             <div class="article-nav-item layout-padding">
   <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
@@ -163,11 +185,10 @@
           <h2 class="card-text--title text-ellipsis">Hello</h2>
         </a>
       
-      <div class="card-text--row">Newer</div>
+      <div class="card-text--row">Older</div>
     </div>
   </article>
 </div>
-          
           
         </nav>
       
@@ -209,13 +230,13 @@
         <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
 </svg>
-        0
+        1
       </div>
       <div class="count-box--item">
         <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
 </svg>
-        0
+        3
       </div>
     </div>
   </div>
@@ -247,6 +268,12 @@
   <div class="widget-body">
     <ul class="categories-list">
       
+        <li class="categories-list-item">
+          <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">
+            信息安全 (1)
+          </a>
+        </li>
+        
     </ul>
   </div>
 </section>
@@ -260,7 +287,7 @@
   </div>
   <div class="widget-body">
     <div class="tags-cloud">
-      
+      <a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" style="font-size: 10px;" class="tags-cloud-0">信息安全</a> <a href="/tags/%E7%A4%BE%E4%BA%A4%E7%BD%91%E7%BB%9C/" style="font-size: 10px;" class="tags-cloud-0">社交网络</a> <a href="/tags/%E9%9A%90%E7%A7%81/" style="font-size: 10px;" class="tags-cloud-0">隐私</a>
     </div>
   </div>
 </section>
