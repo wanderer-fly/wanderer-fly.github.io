@@ -385,8 +385,11 @@ html.show-mobile-nav .navbar-list {
   animation: showMobileNav 0.4s ease-out forwards;
 }
 .navbar {
-  position: relative;
-  z-index: 2;
+  position: fixed;
+  width: 100%;
+  z-index: 6;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .navbar-content {
   display: flex;
@@ -584,7 +587,7 @@ html.show-mobile-nav .navbar-list {
 .header-content {
   position: relative;
   width: 100%;
-  height: var(--banner-height);
+  height: 100vh;
   margin: auto;
   display: flex;
   flex-direction: column;
