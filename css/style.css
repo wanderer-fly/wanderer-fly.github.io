@@ -202,6 +202,11 @@ body {
 *:after {
   box-sizing: inherit;
 }
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 ol,
 ul {
   list-style: none;
@@ -1140,6 +1145,9 @@ html.show-mobile-nav .navbar-list {
   flex: 1 0 auto;
   min-width: 25%;
   max-width: 100%;
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
 }
 .content-container.article-list .card-container.article-card {
   padding: var(--content-large-padding);
@@ -1329,5 +1337,45 @@ html.show-mobile-nav .navbar-list {
   }
   .content-container.post-container .widget-info {
     display: none;
+  }
+}
+@-moz-keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@-webkit-keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@-o-keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
   }
 }

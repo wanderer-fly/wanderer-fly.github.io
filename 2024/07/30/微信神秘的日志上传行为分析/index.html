@@ -142,38 +142,51 @@
       
       
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h1 id="微信偷偷上传日志行为分析"><a href="#微信偷偷上传日志行为分析" class="headerlink" title="微信偷偷上传日志行为分析"></a>微信偷偷上传日志行为分析</h1><h2 id="分析微信行为"><a href="#分析微信行为" class="headerlink" title="分析微信行为"></a>分析微信行为</h2><blockquote>
+        <link rel="stylesheet" type="text&#x2F;css" href="https://cdn.jsdelivr.net/npm/hexo-tag-hint@0.3.1/dist/hexo-tag-hint.min.css"><h1 id="%E5%BE%AE%E4%BF%A1%E5%81%B7%E5%81%B7%E4%B8%8A%E4%BC%A0%E6%97%A5%E5%BF%97%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90" tabindex="-1">微信偷偷上传日志行为分析</h1>
+<h2 id="%E5%88%86%E6%9E%90%E5%BE%AE%E4%BF%A1%E8%A1%8C%E4%B8%BA" tabindex="-1">分析微信行为</h2>
+<blockquote>
 <p>传说，在遥远的<code>~/Library/Containers/com.tencent.xinWeChat/Data/Library/Caches/com.tencent.xinWeChat/2.0b4.0.9/log</code>，住着一群野生的日志……</p>
 </blockquote>
 <img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/xlog_folder.png" class="" title="微信的神秘日志文件夹">
-
 <blockquote>
 <p>那些日志由微信生成，记录着你的生辰八字（bushi</p>
 </blockquote>
 <p>曾经看到过一篇博文，上面提到了某个微信用户发现自己Mac上的微信占用空间高达几GB，甚至会有1GB多的神秘的加密日志隐藏在窑不可测的深处</p>
 <p>为了验证事件的真实性，这里按照那位博主使用的Xcode自带的Instruments工具</p>
 <img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/xcode_instruments_startup.png" class="" title="Instruments启动！">
-
 <p>选择File Activity，在Running Application中选择WeChat.app，然后记录大概几分钟</p>
 <img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/select_wechat.png" class="" title="选择WeChat.app">
-
 <p>输入密码开始监控，在此期间我们把微信软件保持后台静默，差不多五分钟后我们停止Record等待Analyze结束后我们简单过滤一下<code>xlog</code>字样</p>
 <img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/search_xlog.png" class="" title="过滤xlog">
-
 <p>由于我这里已经将其权限禁止了所以这里会提示无权限</p>
 <p>为了安全起见我们还是需要禁止微信记录这些神秘的日志文件</p>
-<h2 id="限制微信偷传数据"><a href="#限制微信偷传数据" class="headerlink" title="限制微信偷传数据"></a>限制微信偷传数据</h2><p>从上面我们可以看到，即使微信保持后台静默，它仍然会生成加密的xlog文件，并上传至腾讯的服务器。由于其已经加密，已经无法得知具体包含了什么信息，为了保护隐私，我们可以通过禁止微信对log目录的读写权限来防止微信记录日志：</p>
+<h2 id="%E9%99%90%E5%88%B6%E5%BE%AE%E4%BF%A1%E5%81%B7%E4%BC%A0%E6%95%B0%E6%8D%AE" tabindex="-1">限制微信偷传数据</h2>
+<p>从上面我们可以看到，即使微信保持后台静默，它仍然会生成加密的xlog文件，并上传至腾讯的服务器。由于其已经加密，已经无法得知具体包含了什么信息，为了保护隐私，我们可以通过禁止微信对log目录的读写权限来防止微信记录日志：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm -rf ~/Library/Containers/com.tencent.xinWeChat/Data/Library/Caches/com.tencent.xinWeChat/2.0b4.0.9/log/*</span><br><span class="line">sudo chmod 400 ~/Library/Containers/com.tencent.xinWeChat/Data/Library/Caches/com.tencent.xinWeChat/2.0b4.0.9/log</span><br></pre></td></tr></table></figure>
-
 <img src="/2024/07/30/%E5%BE%AE%E4%BF%A1%E7%A5%9E%E7%A7%98%E7%9A%84%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/image/prevent_log.png" class="" title="修改权限">
-
 <p>大功告成～</p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
 
       </section>
 
       
       
         <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2024/07/30/test1/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">test1</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
           
           
             <div class="article-nav-item layout-padding">
@@ -224,7 +237,7 @@
         <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
 </svg>
-        <span>2</span>
+        <span>6</span>
       </div>
       <div class="count-box--item">
         <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
