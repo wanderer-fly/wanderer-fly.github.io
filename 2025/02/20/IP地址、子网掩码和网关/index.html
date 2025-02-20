@@ -15,7 +15,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/wanderer-fly/GitPic/main/IP%E5%9C%B0%E5%9D%80%E5%88%86%E7%B1%BB.png">
 <meta property="article:published_time" content="2025-02-20T09:50:50.000Z">
-<meta property="article:modified_time" content="2025-02-20T13:40:08.158Z">
+<meta property="article:modified_time" content="2025-02-20T13:58:47.279Z">
 <meta property="article:author" content="蹦蹦小圆帽">
 <meta property="article:tag" content="计算机网络 TCP&#x2F;IP">
 <meta name="twitter:card" content="summary">
@@ -25,15 +25,15 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1740059331549">
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1740059946014">
 
-<link rel="stylesheet" href="/css/style.css?v=1740059331549">
+<link rel="stylesheet" href="/css/style.css?v=1740059946014">
 
 
 
 
     
-        <link rel="stylesheet" href="/custom.css?v=1740059331549">
+        <link rel="stylesheet" href="/custom.css?v=1740059946014">
     
 
 
@@ -43,7 +43,7 @@
 <script src="/lib/lax.min.js" async></script>
 
 
-<script async src="/js/app.js?v=1740059331549"></script>
+<script async src="/js/app.js?v=1740059946014"></script>
 
  
 
@@ -414,13 +414,7 @@
 <p>广播地址用于发送信息给网络中的所有主机，<em>所有的主机收到该广播地址发出的数据包都会处理这些数据</em></p>
 <p>广播地址是该子网中主机部分所有位都为<code>1</code>的地址</p>
 <p>例如，对于子网<code>96.120.0.0/24</code>，<code>96.120.0.255</code>为该子网的广播地址</p>
-<p>而对于子网<code>96.120.0.0/28</code>，子网掩码<code>/28</code>表示网络部分占28位，剩余4位是主机部分，所以，每个子网中有<code>2^4 = 16</code>个IP地址</p>
-<p>由于子网的第一个地址是网络地址，最后一个地址是广播地址，中间的地址用于分配给主机</p>
-<p>其中，</p>
-<p>第一个子网：<code>96.120.0.0/28</code>，地址范围是<code>96.120.0.0</code>到<code>96.120.0.15</code></p>
-<p>第二个子网：<code>96.120.0.16/28</code>，地址范围是<code>96.120.0.16</code>到<code>96.120.0.31</code></p>
-<p>第二个子网：<code>96.120.0.32/28</code>，地址范围是<code>96.120.0.32</code>到<code>96.120.0.47</code></p>
-<p>最后一个子网：<code>96.120.0.240/28</code>，地址范围是<code>96.120.0.240</code>到<code>96.120.0.255</code></p>
+<p>而对于子网<code>96.120.0.0/28</code>，子网掩码<code>/28</code>表示网络部分占28位，剩余4位是主机部分，所以，子网中有<code>2^4 = 16</code>个IP地址</p>
 <p>要找广播地址，只需要将主机部分的4个位全部置为1 <strong>（广播地址是该子网中最大（最后）一个地址）</strong>，因此该子网的广播地址为<code>96.120.0.15</code></p>
 <h4 id="私有地址"><a href="#私有地址" class="headerlink" title="私有地址"></a>私有地址</h4><p>在IPv4地址协议中预留了3个IP地址段，作为私有地址，供组织机构内部使用。</p>
 <ul>
@@ -511,7 +505,7 @@
 </div>
   
   
-    <script async src="/js/copy-codeblock.js?v=1740059331537"></script>
+    <script async src="/js/copy-codeblock.js?v=1740059946004"></script>
   
 
   
