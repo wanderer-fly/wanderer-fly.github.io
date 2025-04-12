@@ -96,6 +96,22 @@ widgets:
               img: https://raw.githubusercontent.com/wanderer-fly/GitPic/main/avatar.jpg
               link : https://xym.one/
 
+pjax: 
+  enable: true
+  avoid_banner: false
+  elements:
+  selectors:
+  switches:
+  switchesOptions:
+  history: true
+  # 如果启用这个配置项，必须设置 `avoid_banner: false`
+  scrollTo: false
+  scrollRestoration: false
+  cacheBust: false
+  debug: false
+  currentUrlFullReload: false
+  timeout: 0
+
 copyTip: false
 
 slotHead: | 
