@@ -182,14 +182,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/CTF/" style="color: #ff7d73">
+                <a href="/tags/CTF/" style="color: #03a9f4">
                     CTF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Web/" style="color: #03a9f4">
+                <a href="/tags/Web/" style="color: #ff7d73">
                     Web
                 </a>
             </span>
@@ -203,7 +203,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/PHP/" style="color: #ff7d73">
+                <a href="/tags/PHP/" style="color: #03a9f4">
                     PHP
                 </a>
             </span>
@@ -223,9 +223,7 @@
 <p>铁柱是一位年轻的网络安全研究员，在整理已故教授的遗物时，他发现了一台古老的计算机和一段神秘的代码。这台计算机上运行着一个实验性的安全系统，教授曾用它来测试一种新的对象序列化技术。然而，系统中存在一个致命的漏洞，允许通过精心构造的序列化对象来执行任意代码。铁柱需要利用这个漏洞，激活系统中隐藏的&quot;神器&quot;程序，从而找到教授留下的第一个秘密。</p>
 <h2 id="解题步骤">解题步骤</h2>
 <p>打开页面看到</p>
-<pre><code class="language-php">
-&lt;?php
-highlight_file(__FILE__);
+<pre><code class="language-php">highlight_file(__FILE__);
 error_reporting(0);
 class a&#123;
     var $act;
@@ -238,10 +236,8 @@ $a-&gt;action();
 ?&gt; 
 </code></pre>
 <p>在本题中，使用了<code>eval()</code>函数，该函数会把字符串作为代码执行，比如：</p>
-<pre><code class="language-php">&lt;?php
-    $cmd = &quot;system('calc')&quot;
+<pre><code class="language-php">    $cmd = &quot;system('calc')&quot;
     eval($cmd)
-?&gt;
 </code></pre>
 <p>就可以打开计算器</p>
 <p>题目中<code>highlight_file(__FILE__)</code>用于高亮显示代码文件，<code>error_reporting(0)</code>可以清空报错信息，因此我们可以构造payload：</p>

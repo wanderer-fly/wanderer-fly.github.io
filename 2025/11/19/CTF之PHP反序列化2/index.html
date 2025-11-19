@@ -182,21 +182,21 @@
             
             <span class="tag">
                 
-                <a href="/tags/CTF/" style="color: #00a596">
+                <a href="/tags/CTF/" style="color: #ff7d73">
                     CTF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Web/" style="color: #03a9f4">
+                <a href="/tags/Web/" style="color: #00a596">
                     Web
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #00bcd4">
+                <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #ffa2c4">
                     渗透测试
                 </a>
             </span>
@@ -219,8 +219,7 @@
 <p>在激活了第一个神器后，铁柱发现这只是通往更大秘密的入口。教授设计了一个复杂的数字迷宫，只有通过特定的身份验证才能进入迷宫的核心区域。迷宫的守卫是一个登录系统。但铁柱很快意识到，系统存在反序列化漏洞，他可以通过构造特殊的序列化对象来绕过身份验证，进入迷宫的深处寻找下一个线索。</p>
 <h2 id="解题步骤：">解题步骤：</h2>
 <p>打开题目得到页面：</p>
-<pre><code class="language-php"> &lt;?php
-highlight_file(__FILE__);
+<pre><code class="language-php">highlight_file(__FILE__);
 error_reporting(0);
 include(&quot;flag.php&quot;);
 class mylogin
@@ -243,7 +242,6 @@ $a = unserialize($_GET['param']);
 if ($a-&gt;login()) &#123;
     echo $flag;
 &#125;
-?&gt; 
 </code></pre>
 <p>我们看到要想<code>echo $flag;</code>，首先需要让<code>$a-&gt;login()</code>为true，而这里变量<code>$a</code>可控（<code>$a = unserialize($_GET['param']);</code>），我们可以尝试构造<code>param</code>：</p>
 <pre><code class="language-php">O:&lt;类名长度&gt;:&quot;类名&quot;:&lt;属性数量&gt;:&#123;&lt;属性&gt;&#125;
