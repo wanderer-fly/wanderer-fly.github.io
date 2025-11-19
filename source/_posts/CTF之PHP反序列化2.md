@@ -21,7 +21,6 @@ tags:
 打开题目得到页面：
 
 ```php
- <?php
 highlight_file(__FILE__);
 error_reporting(0);
 include("flag.php");
@@ -45,7 +44,6 @@ $a = unserialize($_GET['param']);
 if ($a->login()) {
     echo $flag;
 }
-?> 
 ```
 
 我们看到要想`echo $flag;`，首先需要让`$a->login()`为true，而这里变量`$a`可控（`$a = unserialize($_GET['param']);`），我们可以尝试构造`param`：

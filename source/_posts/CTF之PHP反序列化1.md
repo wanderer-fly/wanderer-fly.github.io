@@ -29,8 +29,6 @@ tags:
 打开页面看到
 
 ```php
-
-<?php
 highlight_file(__FILE__);
 error_reporting(0);
 class a{
@@ -47,10 +45,8 @@ $a->action();
 在本题中，使用了`eval()`函数，该函数会把字符串作为代码执行，比如：
 
 ```php
-<?php
     $cmd = "system('calc')"
     eval($cmd)
-?>
 ```
 
 就可以打开计算器

