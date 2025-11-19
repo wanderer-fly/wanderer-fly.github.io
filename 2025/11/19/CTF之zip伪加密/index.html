@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>CentOS7重置root密码 | 蹦蹦小圆帽の部落格</title>
+    <title>CTF之zip伪加密 | 蹦蹦小圆帽の部落格</title>
     <meta name="author" content="蹦蹦小圆帽" />
     <meta name="description" content="这个世界灿烂盛大！" />
     <meta name="keywords" content="blog" />
@@ -163,14 +163,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>CentOS7重置root密码</h1>
+        <h1>CTF之zip伪加密</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/9/28
+            2025/11/19
         </span>
         
         
@@ -182,8 +182,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/Linux/" style="color: #03a9f4">
-                    Linux
+                <a href="/tags/CTF/" style="color: #ff7d73">
+                    CTF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Misc/" style="color: #00bcd4">
+                    Misc
                 </a>
             </span>
             
@@ -192,68 +199,35 @@
     </div>
     
     <div class="content" v-pre>
-        <h1>CentOS 7 重置root密码</h1>
-<p>CentOS 7 安装过程中没有设置root密码、没有将新建的用户加入管理员组，导致无法使用su和sudo命令</p>
-<h2 id="解决思路">解决思路</h2>
-<p>进入single user mode设置root密码或将用户加入sudoers里面</p>
-<h2 id="解决步骤">解决步骤</h2>
-<ol>
-<li>
-<p>重启虚拟机，在GRUB引导页面按 <code>E</code> 键，进入编辑模式</p>
-</li>
-<li>
-<p>找到<code>linux</code>行，例如：</p>
-<pre><code>linux16 /vmlinuz-3.10.0-862.e17...
+        <h1>CTF之zip伪加密</h1>
+<p>题目只有一个zip，下载下来提示需要输入密码</p>
+<p>zip伪加密的原理是在文件头加密标志位做修改，使文件打开时被识别为加密的zip，实际上并没有密码。</p>
+<h2 id="解题过程">解题过程</h2>
+<p>使用任意16进制编辑器打开该zip文件，得到：</p>
+<pre><code>Downloads ❯ xxd zip伪加密.zip
+00000000: 504b 0304 1400 0900 0800 50a3 a54a 2138  PK........P..J!8
+00000010: 7665 1900 0000 1700 0000 0800 0000 666c  ve............fl
+00000020: 6167 2e74 7874 4bcb 494c af76 4cc9 35f4  ag.txtK.IL.vL.5.
+00000030: d375 3272 d7cd 0ed5 0d8e f20c a805 0050  .u2r...........P
+00000040: 4b01 021f 0014 0009 0008 0050 a3a5 4a21  K..........P..J!
+00000050: 3876 6519 0000 0017 0000 0008 0024 0000  8ve..........$..
+00000060: 0000 0000 0020 0000 0000 0000 0066 6c61  ..... .......fla
+00000070: 672e 7478 740a 0020 0000 0000 0001 0018  g.txt.. ........
+00000080: 000f f504 d59a c5d2 0146 1fcb 8a9a c5d2  .........F......
+00000090: 0146 1fcb 8a9a c5d2 0150 4b05 0600 0000  .F.......PK.....
+000000a0: 0001 0001 005a 0000 003f 0000 0000 00    .....Z...?.....
+Downloads ❯
 </code></pre>
-<p>在这一行的末尾（方向键移动到行尾，建议按<code>END</code>键定位到末尾，有些同学可能不知道行尾的意思</p>
-</li>
-<li>
-<p>添加以下内容（不需要另起一行！！）</p>
-<pre><code>rd.break console=tty0
-</code></pre>
-<p>然后按<code>Ctrl+X</code>启动（进入单用户模式）</p>
-</li>
-<li>
-<p>以rw模式重新挂载/sysroot:</p>
-<pre><code>mount -o rw,remount /sysroot
-</code></pre>
-</li>
-<li>
-<p>切换到/sysroot：</p>
-<pre><code>chroot /sysroot
-</code></pre>
-</li>
-<li>
-<p>标准输入修改root密码</p>
-<pre><code>echo '123456' | passwd --stdin root
-</code></pre>
-<p>注意需要selinux处于disabled状态，如果不懂请参考方法2</p>
-</li>
-<li>
-<p>(方法2) 将当前用户添加到sudoers文件：</p>
-<pre><code>EDITOR=vim visudo
-</code></pre>
-<p>找到这一行：（可以通过直接输入<code>/Allow root to run</code>快速搜索）</p>
-<pre><code>root    ALL=(ALL)   ALL
-</code></pre>
-<p>在下面插入（按<code>i</code>进入插入模式）：</p>
-<pre><code>你的用户名  ALL=(ALL)   NOPASSWD:ALL
-</code></pre>
-<p>然后按<code>Esc</code>退出插入模式，按住<code>Ctrl</code>连续按两下<code>Z</code>保存退出</p>
-<p>输入<code>exit</code>退出chroot容器</p>
-<p>输入<code>reboot</code>重启</p>
-</li>
-<li>
-<p>(方法2) 修改root密码</p>
-<p>开机后登陆你的用户，打开终端，输入：</p>
-<pre><code>sudo su
-</code></pre>
-<p>进入root用户，然后输入</p>
-<pre><code>passwd root
-</code></pre>
-<p>输入你要设置的密码（输入两遍）即可重置root密码</p>
-</li>
-</ol>
+<p>其中，<code>504b 0304</code>开头部分为<strong>压缩源文件数据区</strong></p>
+<p><code>504b 0304</code>是文件头标记</p>
+<p><code>1400</code> 表示解压文件需要的pkware版本</p>
+<p><code>0900</code> 表示文件是否加密</p>
+<p><code>0800</code> 为压缩方式</p>
+<p><code>50a3</code> 为最后修改时间</p>
+<p><code>a54a</code> 为最后修改日期</p>
+<p>但是我们要修改的地方在<strong>压缩源文件目录区</strong>，因此我们要定位到<code>504b 0102</code>部分，这才是压缩源文件目录区的开头标记</p>
+<p><code>1f00</code>表示压缩使用的pkware版本，<code>1400</code>表示解压文件所需pkware版本，接下来的<code>0900</code>表示文件是否加密，这里改为<code>0000</code>即可</p>
+<p>修改完后直接解压文件，得到flag.txt，打开得到flag</p>
 
     </div>
     

