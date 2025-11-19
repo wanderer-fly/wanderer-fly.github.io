@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>蹦蹦小圆帽の部落格</title>
+    <meta name="author" content="蹦蹦小圆帽" />
+    <meta name="description" content="这个世界灿烂盛大！" />
+    <meta name="keywords" content="blog, hexo, theme" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+<script src="/js/lib/home.js"></script>
+
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<link rel="stylesheet" href="/css/main.css" />
+<link rel="preconnect" href="https://static-argvchs.netlify.app" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>哦哟？</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>蹦蹦小圆帽の部落格</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;蹦蹦小圆帽の部落格</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div id="home-head">
+    <div
+        id="home-background"
+        ref="homeBackground"
+        data-images="https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/wanderer_coffee.jpg"
+    ></div>
+    <div id="home-info" @click="homeClick">
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="info">
+            <div class="wrap">
+                <h1>蹦蹦小圆帽の部落格</h1>
+                <h3>Some day we are destined to meet again!</h3>
+                <h5>这个世界灿烂盛大！</h5>
+            </div>
+        </span>
+    </div>
+</div>
+<div
+    id="home-posts-wrap"
+    ref="homePostsWrap"
+    true
+>
+    <div id="home-posts">
+        
+
+<div class="post">
+    <a href="/2025/11/19/%E6%8B%A5%E6%9C%89%E9%AB%98%E7%AB%AF%E6%99%BA%E8%83%BD%E4%B8%BB%E4%BD%93%E6%80%9D%E6%83%B3%E5%92%8C%E5%A4%A7%E6%97%A0%E7%95%8F%E8%8B%B1%E9%9B%84%E7%B2%BE%E7%A5%9E%E7%9A%84%E5%8D%8E%E4%B8%BA%E5%B7%A5%E4%BA%BA%E9%98%B6%E7%BA%A7%E7%94%9F%E4%BA%A7%E7%9A%84%E5%8D%8E%E4%B8%BAMate70%E5%9C%A8%E5%8F%91%E5%B8%83%E4%BB%AA%E5%BC%8F%E4%B8%8A%E5%8F%91%E5%B8%83/">
+        <h2 class="post-title">拥有高端智能主体思想和大无畏英雄精神的华为工人阶级生产的华为Mate70在发布仪式上发布</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/11/19
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <pre class="summary">拥有高端智能主体思想和大无畏英雄精神的华为工人阶级生产的华为Mate70在发布仪式上发布朝中社11月29日电 绝对忠诚于主体智慧型手机国产化事业，实现人民日常所需的高科技设备反垄断伟大事业的华为Mate70在主体113年11月26日光荣发布。凝聚着工人阶级的炙热爱国之情的华为员工无条件誓死拥护实践余承东总书记的主体高科技发展要求，开天辟地，在创造和革新的战场上华为的干部和工人不分昼夜的速度突击下，工厂不断产出迸射出浓重爱国之情的智能手机，华为全体工人阶级战士为争取今年伟大光荣胜利的生产成果不断阔步前进。
+敬爱的任正非总书记发言时，华为全体工人阶级和全体人民群众消费者集体瞻仰以猛虎般无畏精神、跨越级先进思想、超高端设计理念，断层式提升加强将勇于创新，敢于创造，永远捍卫神圣的麒麟芯片完全国产化自研化、鸿蒙操作系统主体化自主开发化的先进智能手机思想体系，努力开创主体智能手机普及化进程的伟大的代表着华为最高尊严以及全面自主研发革命的伟大胜利的象征，现场爆发出雷鸣般的掌声。
+现场消费人民作出报告，他表示了能参加华为新品历史上前所未有的史无前例的自主研发的国产智能手机发布仪式的莫大光荣，华为Mate70以先进的自主研发侧边超声波指纹识别系统、开天辟地的具有跨时代意义的主体思想先进人工智能鸿蒙AI、完全自研的高科技高性能麒麟9020芯片和高端的流畅的完全自主开发的主体鸿蒙系统遥遥领先于竞争对手是智能手机国产化的历史断层性的跨越级进步。</pre>
+        </div>
+    </div>
+
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    <a href="/2025/11/19/%E6%8B%A5%E6%9C%89%E9%AB%98%E7%AB%AF%E6%99%BA%E8%83%BD%E4%B8%BB%E4%BD%93%E6%80%9D%E6%83%B3%E5%92%8C%E5%A4%A7%E6%97%A0%E7%95%8F%E8%8B%B1%E9%9B%84%E7%B2%BE%E7%A5%9E%E7%9A%84%E5%8D%8E%E4%B8%BA%E5%B7%A5%E4%BA%BA%E9%98%B6%E7%BA%A7%E7%94%9F%E4%BA%A7%E7%9A%84%E5%8D%8E%E4%B8%BAMate70%E5%9C%A8%E5%8F%91%E5%B8%83%E4%BB%AA%E5%BC%8F%E4%B8%8A%E5%8F%91%E5%B8%83/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/11/18/Python-requests%E5%85%A5%E9%97%A8/">
+        <h2 class="post-title">Python requests入门</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/11/18
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <pre class="summary">Python基础知识之requestrequests是Python中一个强大且易用的第三方HTTP库，用于发送HTTP请求和处理响应
+安装1pip install requests
+</pre>
+        </div>
+    </div>
+
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    <a href="/2025/11/18/Python-requests%E5%85%A5%E9%97%A8/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/09/28/CentOS7%E9%87%8D%E7%BD%AEroot%E5%AF%86%E7%A0%81/">
+        <h2 class="post-title">CentOS7重置root密码</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/9/28
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <pre class="summary">CentOS 7 重置root密码CentOS 7 安装过程中没有设置root密码、没有将新建的用户加入管理员组，导致无法使用su和sudo命令
+解决思路进入single user mode设置root密码或将用户加入sudoers里面
+解决步骤</pre>
+        </div>
+    </div>
+
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/Linux/" style="color: #ff7d73">Linux</a>
+        </span>
+        
+    </div>
+    <a href="/2025/09/28/CentOS7%E9%87%8D%E7%BD%AEroot%E5%AF%86%E7%A0%81/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/09/28/%E8%BF%99%E4%B8%AA%E4%B8%96%E7%95%8C%E7%81%BF%E7%83%82%E7%9B%9B%E5%A4%A7%EF%BC%81/">
+        <h2 class="post-title">这个世界灿烂盛大！</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/9/28
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <pre class="summary"></pre>
+        </div>
+    </div>
+
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    <a href="/2025/09/28/%E8%BF%99%E4%B8%AA%E4%B8%96%E7%95%8C%E7%81%BF%E7%83%82%E7%9B%9B%E5%A4%A7%EF%BC%81/" class="go-post">阅读全文</a>
+</div>
+
+
+        <div class="page-current">
+    
+    <span class="current">1</span>
+    
+    
+    
+    
+</div>
+
+    </div>
+    
+    <div id="home-card">
+        <div id="card-style">
+    <div id="card-div">
+        <div class="avatar">
+            <img src="https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/avatar.jpg" alt="avatar" />
+        </div>
+        <div class="name">蹦蹦小圆帽</div>
+        <div class="description">
+            <p>蹦蹦小圆帽，轰轰雷大炮！</p>
+
+        </div>
+        
+        <div class="icon-links">
+            
+            <span class="icon-link">
+                <a target="_blank" rel="noopener" href="https://github.com/wanderer-fly">
+                    <i
+                        class="fa-brands fa-github fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+            <span class="icon-link">
+                <a target="_blank" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&uin=3379850248&site=qq&menu=yes">
+                    <i
+                        class="fa-brands fa-qq fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+            <span class="icon-link">
+                <a target="_blank" rel="noopener" href="https://twitter.com/WandererFly">
+                    <i
+                        class="fa-brands fa-twitter fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+            <span class="icon-link">
+                <a href="mailto:lukjeming@gmail.com">
+                    <i
+                        class="fa-solid fa-envelope fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+        </div>
+        
+        
+    </div>
+</div>
+
+    </div>
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2025 蹦蹦小圆帽の部落格
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;蹦蹦小圆帽
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            
+            这个世界灿烂盛大！
+            
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    <script>
+        console.log("这个世界灿烂盛大！");
+        if (!window.hasOwnProperty("ontouchstart")) {
+            let html = '<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas><script src="https://static-argvchs.netlify.app/js/fireworks.min.js"><\/script>';
+            document.body.append(document.createRange().createContextualFragment(html));
+        }
+    </script>
+    
+</body>
+</html>

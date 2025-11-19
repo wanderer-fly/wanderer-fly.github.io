@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>Python requests入门 | 蹦蹦小圆帽の部落格</title>
+    <meta name="author" content="蹦蹦小圆帽" />
+    <meta name="description" content="这个世界灿烂盛大！" />
+    <meta name="keywords" content="blog, hexo, theme" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<link rel="stylesheet" href="/css/main.css" />
+<link rel="preconnect" href="https://static-argvchs.netlify.app" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>哦哟？</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>蹦蹦小圆帽の部落格</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;蹦蹦小圆帽の部落格</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>Python requests入门</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/11/18
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="Python基础知识之request"><a href="#Python基础知识之request" class="headerlink" title="Python基础知识之request"></a>Python基础知识之request</h1><p><code>requests</code>是Python中一个强大且易用的第三方HTTP库，用于发送HTTP请求和处理响应</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install requests<br></code></pre></td></tr></table></figure>
+
+<h2 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br>r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1/&quot;</span>)<br><br><span class="hljs-built_in">print</span>(r.status_code)<br><span class="hljs-built_in">print</span>(r.text)<br></code></pre></td></tr></table></figure>
+
+<h3 id="带参数的GET"><a href="#带参数的GET" class="headerlink" title="带参数的GET"></a>带参数的GET</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br>params = &#123;<br>    <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,<br>    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;wanderer&quot;</span><br>&#125;<br><br>r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1/&quot;</span>, params=params)<br><br><span class="hljs-built_in">print</span>(r.url) <span class="hljs-comment"># http://127.0.0.1/?id=1&amp;name=wanderer</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="POST发送表单数据"><a href="#POST发送表单数据" class="headerlink" title="POST发送表单数据"></a>POST发送表单数据</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br>data = &#123;<br>    <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,<br>    <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;123456&quot;</span><br>&#125;<br><br>r = requests.post(<span class="hljs-string">&quot;http://127.0.0.1/login&quot;</span>, data=data)<br><br><span class="hljs-built_in">print</span>(r.text)<br></code></pre></td></tr></table></figure>
+
+<h3 id="POST发送JSON"><a href="#POST发送JSON" class="headerlink" title="POST发送JSON"></a>POST发送JSON</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br>json = &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;Wang Ba&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">114514</span><br>&#125;<br><br>r = requests.post(<span class="hljs-string">&quot;http://127.0.0.1/user&quot;</span>, json=json)<br><br><span class="hljs-keyword">try</span>:<br>    <span class="hljs-built_in">print</span>(r.json())<br>    json_data = r.json()<br>    <span class="hljs-built_in">print</span>(json.dumps(json_data))<br><br>    name = json_data.get(<span class="hljs-string">&quot;name&quot;</span>) <span class="hljs-comment"># 字段不存在返回None</span><br><span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>    <span class="hljs-built_in">print</span>(e)<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>json&#x3D;xxx 会自动设置 <code>Content-Type: application/json</code></strong></p>
+<h2 id="添加Headers"><a href="#添加Headers" class="headerlink" title="添加Headers"></a>添加Headers</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">headers = &#123;<br>    <span class="hljs-string">&quot;User-Agent&quot;</span>: <span class="hljs-string">&quot;Motherfucker Browser 114514.0&quot;</span>,<br>    <span class="hljs-string">&quot;Authorization&quot;</span>: <span class="hljs-string">&quot;Bearer this_is_a_fucking_token&quot;</span><br>&#125;<br><br>r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1&quot;</span>, headers=headers)<br></code></pre></td></tr></table></figure>
+
+<p>打印输出Headers:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">in</span> r.request.headers.items():<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;<span class="hljs-subst">&#123;k&#125;</span>: <span class="hljs-subst">&#123;v&#125;</span>&quot;</span><span class="hljs-string">&quot;)</span><br></code></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">User-Agent, python-requests/2.32.5<br>Accept-Encoding, gzip, deflate, zstd<br>Accept, */*<br>Connection, keep-alive<br>Content-Length, 30<br>Content-Type, application/x-www-form-urlencoded<br></code></pre></td></tr></table></figure>
+
+<h2 id="处理JSON响应"><a href="#处理JSON响应" class="headerlink" title="处理JSON响应"></a>处理JSON响应</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1/data&quot;</span>)<br><br>data = r.json()<br><span class="hljs-built_in">print</span>(data)<br></code></pre></td></tr></table></figure>
+
+<h2 id="发送Cookie"><a href="#发送Cookie" class="headerlink" title="发送Cookie"></a>发送Cookie</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">cookies = &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;shabi&quot;</span><br>&#125;<br><br>r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1&quot;</span>, cookies=cookies)<br></code></pre></td></tr></table></figure>
+
+<h2 id="携带Session"><a href="#携带Session" class="headerlink" title="携带Session"></a>携带Session</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">session = requests.Session()<br><br><span class="hljs-comment"># 登陆</span><br>session.post(<span class="hljs-string">&quot;http://127.0.0.1/login&quot;</span>, data=&#123;<span class="hljs-string">&quot;a&quot;</span>:<span class="hljs-number">1</span>,<span class="hljs-string">&quot;b&quot;</span>:<span class="hljs-number">2</span>&#125;)<br><br>r = session.get(<span class="hljs-string">&quot;http://127.0.0.1/profile&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">files = &#123;<br>    <span class="hljs-string">&quot;files&quot;</span>: <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;file.txt&quot;</span>, <span class="hljs-string">&quot;rb&quot;</span>)<br>&#125;<br><br>r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1&quot;</span>, files=files)<br></code></pre></td></tr></table></figure>
+
+<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1/file.zip&quot;</span>)<br><br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;file.zip&quot;</span>, <span class="hljs-string">&quot;wb&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    f.write(r.content)<br></code></pre></td></tr></table></figure>
+
+<h3 id="如果文件过大，我们不应该一次性写入内存，可以使用流式读取："><a href="#如果文件过大，我们不应该一次性写入内存，可以使用流式读取：" class="headerlink" title="如果文件过大，我们不应该一次性写入内存，可以使用流式读取："></a>如果文件过大，我们不应该一次性写入内存，可以使用流式读取：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">url = <span class="hljs-string">&quot;http://127.0.0.1/bigfile.md&quot;</span><br><span class="hljs-keyword">with</span> requests.get(url, stream=<span class="hljs-literal">True</span>) <span class="hljs-keyword">as</span> r:<br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;bigfile.md&quot;</span>, <span class="hljs-string">&quot;wb&quot;</span>) <span class="hljs-keyword">as</span> f:<br>        <span class="hljs-keyword">for</span> chunk <span class="hljs-keyword">in</span> r.iter_content(chunk_size=<span class="hljs-number">1024</span>):<br>            f.write(chunk)<br></code></pre></td></tr></table></figure>
+
+<h2 id="异常捕获"><a href="#异常捕获" class="headerlink" title="异常捕获"></a>异常捕获</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br><span class="hljs-keyword">try</span>:<br>    r = requests.get(<span class="hljs-string">&quot;http://127.0.0.1&quot;</span>, timeout=<span class="hljs-number">5</span>)<br><span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;[-] Failed to request: &quot;</span>, e)<br></code></pre></td></tr></table></figure>
+
+<h2 id="常见用法（以上没列出的）"><a href="#常见用法（以上没列出的）" class="headerlink" title="常见用法（以上没列出的）"></a>常见用法（以上没列出的）</h2><h3 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">proxies = &#123;<br>    <span class="hljs-string">&quot;http&quot;</span>: <span class="hljs-string">&quot;http://127.0.0.1:8080&quot;</span>,<br>    <span class="hljs-string">&quot;https&quot;</span>: <span class="hljs-string">&quot;http://127.0.0.1:8080&quot;</span><br>&#125;<br><br>requests.get(url, proxies=proxies)<br></code></pre></td></tr></table></figure>
+
+<h3 id="忽略SSL错误"><a href="#忽略SSL错误" class="headerlink" title="忽略SSL错误"></a>忽略SSL错误</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> urllib3<br>urllib3.disable_warnings() <span class="hljs-comment"># 不加这一行可能会产生提示</span><br><br>requests.get(url, verify=<span class="hljs-literal">False</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Keep-Alive相关"><a href="#Keep-Alive相关" class="headerlink" title="Keep-Alive相关"></a>Keep-Alive相关</h3><p><strong>requests默认Keep-Alive</strong>，关闭Keep-Alive：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">requests.get(<span class="hljs-string">&quot;http://127.0.0.1&quot;</span>, headers=&#123;<span class="hljs-string">&quot;Connection&quot;</span>: <span class="hljs-string">&quot;close&quot;</span>&#125;) <span class="hljs-comment"># 关闭</span><br><br>requests.get(<span class="hljs-string">&quot;http://127.0.0.1&quot;</span>, headers=&#123;<span class="hljs-string">&quot;Connection&quot;</span>: <span class="hljs-string">&quot;keep-alive&quot;</span>&#125;) <span class="hljs-comment">#保持长链接</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="流式读取"><a href="#流式读取" class="headerlink" title="流式读取"></a>流式读取</h3><p>上面已经提到了，这里只做一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">r = requests.get(url, steam=<span class="hljs-literal">True</span>)<br><span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> r.iter_lines():<br>    <span class="hljs-built_in">print</span>(line.decode())<br></code></pre></td></tr></table></figure>
+
+<h3 id="禁止重定向"><a href="#禁止重定向" class="headerlink" title="禁止重定向"></a>禁止重定向</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">requests.get(url, allow_redirects=<span class="hljs-literal">False</span>)<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="所有HTTP方法"><a href="#所有HTTP方法" class="headerlink" title="所有HTTP方法"></a>所有HTTP方法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">requests.get(url)<br>requests.post(url)<br>requests.put(url)<br>requests.delete(url)<br>requests.patch(url)<br>requests.options(url)<br></code></pre></td></tr></table></figure>
+
+<h2 id="常用的请求信息"><a href="#常用的请求信息" class="headerlink" title="常用的请求信息"></a>常用的请求信息</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">response = requests.get(url)<br>req = response.request<br><br>req.url         <span class="hljs-comment"># 请求URL</span><br>req.method      <span class="hljs-comment"># 请求方法</span><br>req.headers     <span class="hljs-comment"># Headers</span><br>req.body        <span class="hljs-comment"># 请求体</span><br></code></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><br>data = &#123;<br>    <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,<br>    <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;123456&quot;</span><br>&#125;<br><br>r = requests.post(<span class="hljs-string">&quot;https://www.google.com&quot;</span>, data=data)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;请求地址<span class="hljs-subst">&#123;r.request.url&#125;</span>&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;请求方法：<span class="hljs-subst">&#123;r.request.method&#125;</span>&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;请求体：<span class="hljs-subst">&#123;r.request.body&#125;</span>&quot;</span>)<br><br><span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">in</span> r.request.headers.items():<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;<span class="hljs-subst">&#123;k&#125;</span>, <span class="hljs-subst">&#123;v&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">请求地址https://www.google.com/<br>请求方法：POST<br>请求体：username=admin&amp;password=123456<br>User-Agent, python-requests/2.32.5<br>Accept-Encoding, gzip, deflate, zstd<br>Accept, */*<br>Connection, keep-alive<br>Content-Length, 30<br>Content-Type, application/x-www-form-urlencoded<br></code></pre></td></tr></table></figure>
+
+<h2 id="常用的响应信息"><a href="#常用的响应信息" class="headerlink" title="常用的响应信息"></a>常用的响应信息</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">response.status_code    <span class="hljs-comment"># HTTP状态码</span><br>response.headers        <span class="hljs-comment"># 响应Headers</span><br>response.text           <span class="hljs-comment"># 字符串内容</span><br>response.json()         <span class="hljs-comment"># JSON内容</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h2><ol>
+<li><p><code>r = requests(url)</code> 中 <code>r</code> 是 <code>response</code> ，主播懒得写全，看不懂别学了</p>
+</li>
+<li><p>什么是请求，什么是响应？问出来这个问题建议先学会上网</p>
+</li>
+<li><p>为什么找不到包<code>requests</code>？答：问问你辅导员你们学校转专业有什么要求吗？</p>
+</li>
+</ol>
+<h2 id="附录1-JSON数据提取"><a href="#附录1-JSON数据提取" class="headerlink" title="附录1: JSON数据提取"></a>附录1: JSON数据提取</h2><h3 id="例1"><a href="#例1" class="headerlink" title="例1:"></a>例1:</h3><p>对于JSON数据（假设返回对象）:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;my_token&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;user&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;斯卡拉姆齐&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ok&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>提取其中的数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">json_data = r.json()<br><br>token = json_data[<span class="hljs-string">&quot;data&quot;</span>][<span class="hljs-string">&quot;token&quot;</span>]<br>user_id = json_data[<span class="hljs-string">&quot;data&quot;</span>][<span class="hljs-string">&quot;user&quot;</span>][<span class="hljs-string">&quot;id&quot;</span>]<br>name = data.get(<span class="hljs-string">&quot;data, &#123;&#125;&quot;</span>).get(<span class="hljs-string">&quot;user&quot;</span>, &#123;&#125;).get(<span class="hljs-string">&quot;name&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="例2"><a href="#例2" class="headerlink" title="例2:"></a>例2:</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;items&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;A&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;B&quot;</span><span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">names = [i[<span class="hljs-string">&quot;name&quot;</span>] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> json_data[<span class="hljs-string">&quot;items&quot;</span>]] <span class="hljs-comment">#提取所有name</span><br>id_1 = json_data[<span class="hljs-string">&quot;items&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;id&quot;</span>] <span class="hljs-comment"># 提取第一个id</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="附录2-Python-requests访问谷歌返回搜索结果"><a href="#附录2-Python-requests访问谷歌返回搜索结果" class="headerlink" title="附录2: Python + requests访问谷歌返回搜索结果"></a><del>附录2: Python + requests访问谷歌返回搜索结果</del></h2><p><strong>requests直接访问谷歌可能会导致403报错，这里伪装一下Headers</strong></p>
+<p><em>刚试了伪装Headers也没用这里不写了，<code>requests</code>做不到，因为谷歌强制要求js</em></p>
+
+    </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2025 蹦蹦小圆帽の部落格
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;蹦蹦小圆帽
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            
+            这个世界灿烂盛大！
+            
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    <script>
+        console.log("这个世界灿烂盛大！");
+        if (!window.hasOwnProperty("ontouchstart")) {
+            let html = '<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas><script src="https://static-argvchs.netlify.app/js/fireworks.min.js"><\/script>';
+            document.body.append(document.createRange().createContextualFragment(html));
+        }
+    </script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="argvchs/giscus-comments"
+    data-repo-id="R_kgDOI_uC-w"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOI_uC-84CUToF"
+    data-mapping="pathname"
+    data-strict="1"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="https://static-argvchs.netlify.app/css/giscus.css"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
+    
+</body>
+</html>
