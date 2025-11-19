@@ -985,12 +985,6 @@ ol li {
     display: none; /* 曲线救国 */
 }
 
-.hljs,
-.hljs * {
-    white-space: pre !important;
-    white-space: pre-wrap !important;
-}
-
 .summary {
     color: var(--summary-text, #333);
     white-space: pre-wrap !important;
@@ -1003,3 +997,14 @@ ol li {
     transition: background 0.25s, color 0.25s;
 }
 
+pre[class*="language-"].line-numbers {
+    white-space: pre-wrap !important;
+}
+
+pre[class*="language-"].line-numbers > code {
+    white-space: inherit !important;
+}
+
+pre[class*="language-"].line-numbers .line-numbers-rows {
+    white-space: nowrap !important;
+}

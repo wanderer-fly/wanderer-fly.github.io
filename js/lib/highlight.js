@@ -13,14 +13,13 @@ mixins.highlight = {
         highlight() {
             let codes = document.querySelectorAll("pre");
             for (let i of codes) {
-                // 先保存原始代码内容，避免行号干扰
-                let originalCode = i.textContent;
+                let code = i.textContent;
                 let language = [...i.classList, ...i.firstChild.classList][0] || "plaintext";
                 let highlighted;
                 try {
-                    highlighted = hljs.highlight(originalCode, { language }).value;
+                    highlighted = hljs.highlight(code, { language }).value;
                 } catch {
-                    highlighted = originalCode;
+                    highlighted = code;
                 }
                 i.innerHTML = `
                 <div class="code-content hljs">${highlighted}</div>
@@ -37,8 +36,7 @@ mixins.highlight = {
                     if (this.copying) return;
                     this.copying = true;
                     copycode.classList.add("copied");
-                    // 复制时使用原始代码内容，不包含行号
-                    await navigator.clipboard.writeText(originalCode);
+                    await navigator.clipboard.writeText(code);
                     await this.sleep(1000);
                     copycode.classList.remove("copied");
                     this.copying = false;
