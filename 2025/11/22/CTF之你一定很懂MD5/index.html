@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>CTF之zip伪加密 | 蹦蹦小圆帽の部落格</title>
+    <title>CTF之你一定很懂MD5 | 蹦蹦小圆帽の部落格</title>
     <meta name="author" content="蹦蹦小圆帽" />
     <meta name="description" content="这个世界灿烂盛大！" />
     <meta name="keywords" content="blog" />
@@ -163,14 +163,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>CTF之zip伪加密</h1>
+        <h1>CTF之你一定很懂MD5</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/11/19
+            2025/11/22
         </span>
         
         
@@ -182,15 +182,22 @@
             
             <span class="tag">
                 
-                <a href="/tags/CTF/" style="color: #00bcd4">
+                <a href="/tags/CTF/" style="color: #03a9f4">
                     CTF
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/Misc/" style="color: #ffa2c4">
-                    Misc
+                <a href="/tags/MD5/" style="color: #ff7d73">
+                    MD5
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Crypto/" style="color: #00bcd4">
+                    Crypto
                 </a>
             </span>
             
@@ -199,35 +206,129 @@
     </div>
     
     <div class="content" v-pre>
-        <h1>CTF之zip伪加密</h1>
-<p>题目只有一个zip，下载下来提示需要输入密码</p>
-<p>zip伪加密的原理是在文件头加密标志位做修改，使文件打开时被识别为加密的zip，实际上并没有密码。</p>
-<h2 id="解题过程">解题过程</h2>
-<p>使用任意16进制编辑器打开该zip文件，得到：</p>
-<pre><code>Downloads ❯ xxd zip伪加密.zip
-00000000: 504b 0304 1400 0900 0800 50a3 a54a 2138  PK........P..J!8
-00000010: 7665 1900 0000 1700 0000 0800 0000 666c  ve............fl
-00000020: 6167 2e74 7874 4bcb 494c af76 4cc9 35f4  ag.txtK.IL.vL.5.
-00000030: d375 3272 d7cd 0ed5 0d8e f20c a805 0050  .u2r...........P
-00000040: 4b01 021f 0014 0009 0008 0050 a3a5 4a21  K..........P..J!
-00000050: 3876 6519 0000 0017 0000 0008 0024 0000  8ve..........$..
-00000060: 0000 0000 0020 0000 0000 0000 0066 6c61  ..... .......fla
-00000070: 672e 7478 740a 0020 0000 0000 0001 0018  g.txt.. ........
-00000080: 000f f504 d59a c5d2 0146 1fcb 8a9a c5d2  .........F......
-00000090: 0146 1fcb 8a9a c5d2 0150 4b05 0600 0000  .F.......PK.....
-000000a0: 0001 0001 005a 0000 003f 0000 0000 00    .....Z...?.....
-Downloads ❯
+        <h1>题目</h1>
+<h2 id="你一定很懂MD5">你一定很懂MD5</h2>
+<p><s>我懂个🥚的md5</s></p>
+<pre><code class="language-python">import uuid
+import hashlib
+
+if __name__ == &quot;__main__&quot;:
+    flag = &quot;aicx&#123;xxxxxxxxxxx&#125;&quot;
+    for char in flag:
+        md5_hash = hashlib.md5(char.encode('utf-8')).hexdigest()
+        print(f&quot;&#123;md5_hash&#125;&quot;)
+
+'''output:
+0cc175b9c0f1b6a831c399e269772661
+865c0c0b4ab0e063e5caa3387c1a8741
+4a8a08f09d37b73795649038408b5f33
+9dd4e461268c8034f5c8564e155c67a6
+f95b70fdc3088560732a5ac135644506
+8fa14cdd754f91cc6554c9e71929cce7
+45c48cce2e2d7fbdea1afc51c7c6ad26
+a87ff679a2f3e71d9181a67b7542122c
+8277e0910d750195b448797616e091ad
+eccbc87e4b5ce2fe28308fd9f2a7baf3
+cfcd208495d565ef66e7dff9f98764da
+c4ca4238a0b923820dcc509a6f75849b
+1679091c5a880faf6fb5e6087eb1b2dc
+336d5ebc5436534e61d16e63ddfca327
+a87ff679a2f3e71d9181a67b7542122c
+0cc175b9c0f1b6a831c399e269772661
+8fa14cdd754f91cc6554c9e71929cce7
+c4ca4238a0b923820dcc509a6f75849b
+336d5ebc5436534e61d16e63ddfca327
+a87ff679a2f3e71d9181a67b7542122c
+cfcd208495d565ef66e7dff9f98764da
+45c48cce2e2d7fbdea1afc51c7c6ad26
+92eb5ffee6ae2fec3ad71c777531578f
+336d5ebc5436534e61d16e63ddfca327
+c9f0f895fb98ab9159f51fd0297e236d
+e4da3b7fbbce2345d7772b0674a318d5
+eccbc87e4b5ce2fe28308fd9f2a7baf3
+8f14e45fceea167a5a36dedd4bea2543
+336d5ebc5436534e61d16e63ddfca327
+92eb5ffee6ae2fec3ad71c777531578f
+c9f0f895fb98ab9159f51fd0297e236d
+45c48cce2e2d7fbdea1afc51c7c6ad26
+a87ff679a2f3e71d9181a67b7542122c
+45c48cce2e2d7fbdea1afc51c7c6ad26
+c81e728d9d4c2f636f067f89cc14862c
+8fa14cdd754f91cc6554c9e71929cce7
+45c48cce2e2d7fbdea1afc51c7c6ad26
+cfcd208495d565ef66e7dff9f98764da
+8277e0910d750195b448797616e091ad
+e4da3b7fbbce2345d7772b0674a318d5
+1679091c5a880faf6fb5e6087eb1b2dc
+cbb184dd8e05c9709e5dcaedaa0495cf
+'''
 </code></pre>
-<p>其中，<code>504b 0304</code>开头部分为<strong>压缩源文件数据区</strong></p>
-<p><code>504b 0304</code>是文件头标记</p>
-<p><code>1400</code> 表示解压文件需要的pkware版本</p>
-<p><code>0900</code> 表示文件是否加密</p>
-<p><code>0800</code> 为压缩方式</p>
-<p><code>50a3</code> 为最后修改时间</p>
-<p><code>a54a</code> 为最后修改日期</p>
-<p>但是我们要修改的地方在<strong>压缩源文件目录区</strong>，因此我们要定位到<code>504b 0102</code>部分，这才是压缩源文件目录区的开头标记</p>
-<p><code>1f00</code>表示压缩使用的pkware版本，<code>1400</code>表示解压文件所需pkware版本，接下来的<code>0900</code>表示文件是否加密，这里改为<code>0000</code>即可</p>
-<p>修改完后直接解压文件，得到flag.txt，打开得到flag</p>
+<h2 id="解题思路">解题思路</h2>
+<p>题目给出这段程序的输出output，在离线的情况下我们可以尝试通过for循环枚举的方式解决：</p>
+<pre><code class="language-python">import hashlib
+
+def count_md5(c):
+    return hashlib.md5(c.encode('utf-8')).hexdigest()
+
+def main():
+    md5 = '''
+0cc175b9c0f1b6a831c399e269772661
+865c0c0b4ab0e063e5caa3387c1a8741
+4a8a08f09d37b73795649038408b5f33
+9dd4e461268c8034f5c8564e155c67a6
+f95b70fdc3088560732a5ac135644506
+8fa14cdd754f91cc6554c9e71929cce7
+45c48cce2e2d7fbdea1afc51c7c6ad26
+a87ff679a2f3e71d9181a67b7542122c
+8277e0910d750195b448797616e091ad
+eccbc87e4b5ce2fe28308fd9f2a7baf3
+cfcd208495d565ef66e7dff9f98764da
+c4ca4238a0b923820dcc509a6f75849b
+1679091c5a880faf6fb5e6087eb1b2dc
+336d5ebc5436534e61d16e63ddfca327
+a87ff679a2f3e71d9181a67b7542122c
+0cc175b9c0f1b6a831c399e269772661
+8fa14cdd754f91cc6554c9e71929cce7
+c4ca4238a0b923820dcc509a6f75849b
+336d5ebc5436534e61d16e63ddfca327
+a87ff679a2f3e71d9181a67b7542122c
+cfcd208495d565ef66e7dff9f98764da
+45c48cce2e2d7fbdea1afc51c7c6ad26
+92eb5ffee6ae2fec3ad71c777531578f
+336d5ebc5436534e61d16e63ddfca327
+c9f0f895fb98ab9159f51fd0297e236d
+e4da3b7fbbce2345d7772b0674a318d5
+eccbc87e4b5ce2fe28308fd9f2a7baf3
+8f14e45fceea167a5a36dedd4bea2543
+336d5ebc5436534e61d16e63ddfca327
+92eb5ffee6ae2fec3ad71c777531578f
+c9f0f895fb98ab9159f51fd0297e236d
+45c48cce2e2d7fbdea1afc51c7c6ad26
+a87ff679a2f3e71d9181a67b7542122c
+45c48cce2e2d7fbdea1afc51c7c6ad26
+c81e728d9d4c2f636f067f89cc14862c
+8fa14cdd754f91cc6554c9e71929cce7
+45c48cce2e2d7fbdea1afc51c7c6ad26
+cfcd208495d565ef66e7dff9f98764da
+8277e0910d750195b448797616e091ad
+e4da3b7fbbce2345d7772b0674a318d5
+1679091c5a880faf6fb5e6087eb1b2dc
+cbb184dd8e05c9709e5dcaedaa0495cf
+'''
+    for item in md5.split('\n'):
+        # print(item)
+        for c in range(45, 126):
+            unit = count_md5(chr(c))
+            if unit != item:
+                continue
+            else:
+                print(f&quot;&#123;chr(c)&#125;&quot;, end='')
+        
+    
+if __name__ == '__main__':
+    main()
+</code></pre>
+<p>太low，不解释</p>
 
     </div>
     

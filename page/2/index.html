@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>CTF之zip伪加密 | 蹦蹦小圆帽の部落格</title>
+    <title>蹦蹦小圆帽の部落格</title>
     <meta name="author" content="蹦蹦小圆帽" />
     <meta name="description" content="这个世界灿烂盛大！" />
     <meta name="keywords" content="blog" />
@@ -47,9 +47,7 @@
 
 
 
-
-
-
+<script src="/js/lib/home.js"></script>
 
 <script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <link rel="stylesheet" href="/css/main.css" />
@@ -161,85 +159,135 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1>CTF之zip伪加密</h1>
+            <div id="home-head">
+    <div
+        id="home-background"
+        ref="homeBackground"
+        data-images="https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/wanderer_coffee.jpg"
+    ></div>
+    <div id="home-info" @click="homeClick">
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="info">
+            <div class="wrap">
+                <h1>蹦蹦小圆帽の部落格</h1>
+                <h3>Some day we are destined to meet again!</h3>
+                <h5>这个世界灿烂盛大！</h5>
+            </div>
+        </span>
     </div>
-    <div class="info">
+</div>
+<div
+    id="home-posts-wrap"
+    ref="homePostsWrap"
+    true
+>
+    <div id="home-posts">
+        
+
+<div class="post">
+    <a href="/2025/09/28/%E8%BF%99%E4%B8%AA%E4%B8%96%E7%95%8C%E7%81%BF%E7%83%82%E7%9B%9B%E5%A4%A7%EF%BC%81/">
+        <h2 class="post-title">这个世界灿烂盛大！</h2>
+    </a>
+    <div class="category-and-date">
+        
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/11/19
+            2025/9/28
         </span>
         
-        
-        <span class="tags">
-            <span class="icon">
-                <i class="fa-solid fa-tags fa-fw"></i>
-            </span>
-            
-            
-            <span class="tag">
-                
-                <a href="/tags/CTF/" style="color: #00bcd4">
-                    CTF
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/Misc/" style="color: #ffa2c4">
-                    Misc
-                </a>
-            </span>
-            
-        </span>
         
     </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <pre class="summary"></pre>
+        </div>
+    </div>
+
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    <a href="/2025/09/28/%E8%BF%99%E4%B8%AA%E4%B8%96%E7%95%8C%E7%81%BF%E7%83%82%E7%9B%9B%E5%A4%A7%EF%BC%81/" class="go-post">阅读全文</a>
+</div>
+
+
+        <div class="page-current">
     
-    <div class="content" v-pre>
-        <h1>CTF之zip伪加密</h1>
-<p>题目只有一个zip，下载下来提示需要输入密码</p>
-<p>zip伪加密的原理是在文件头加密标志位做修改，使文件打开时被识别为加密的zip，实际上并没有密码。</p>
-<h2 id="解题过程">解题过程</h2>
-<p>使用任意16进制编辑器打开该zip文件，得到：</p>
-<pre><code>Downloads ❯ xxd zip伪加密.zip
-00000000: 504b 0304 1400 0900 0800 50a3 a54a 2138  PK........P..J!8
-00000010: 7665 1900 0000 1700 0000 0800 0000 666c  ve............fl
-00000020: 6167 2e74 7874 4bcb 494c af76 4cc9 35f4  ag.txtK.IL.vL.5.
-00000030: d375 3272 d7cd 0ed5 0d8e f20c a805 0050  .u2r...........P
-00000040: 4b01 021f 0014 0009 0008 0050 a3a5 4a21  K..........P..J!
-00000050: 3876 6519 0000 0017 0000 0008 0024 0000  8ve..........$..
-00000060: 0000 0000 0020 0000 0000 0000 0066 6c61  ..... .......fla
-00000070: 672e 7478 740a 0020 0000 0000 0001 0018  g.txt.. ........
-00000080: 000f f504 d59a c5d2 0146 1fcb 8a9a c5d2  .........F......
-00000090: 0146 1fcb 8a9a c5d2 0150 4b05 0600 0000  .F.......PK.....
-000000a0: 0001 0001 005a 0000 003f 0000 0000 00    .....Z...?.....
-Downloads ❯
-</code></pre>
-<p>其中，<code>504b 0304</code>开头部分为<strong>压缩源文件数据区</strong></p>
-<p><code>504b 0304</code>是文件头标记</p>
-<p><code>1400</code> 表示解压文件需要的pkware版本</p>
-<p><code>0900</code> 表示文件是否加密</p>
-<p><code>0800</code> 为压缩方式</p>
-<p><code>50a3</code> 为最后修改时间</p>
-<p><code>a54a</code> 为最后修改日期</p>
-<p>但是我们要修改的地方在<strong>压缩源文件目录区</strong>，因此我们要定位到<code>504b 0102</code>部分，这才是压缩源文件目录区的开头标记</p>
-<p><code>1f00</code>表示压缩使用的pkware版本，<code>1400</code>表示解压文件所需pkware版本，接下来的<code>0900</code>表示文件是否加密，这里改为<code>0000</code>即可</p>
-<p>修改完后直接解压文件，得到flag.txt，打开得到flag</p>
+    <a class="page-num" href="/">
+        <i class="fa-solid fa-caret-left fa-fw"></i>
+    </a>
+    <a class="page-num" href="/">1</a>
+    <span class="page-omit">...</span>
+    
+    <span class="current">2</span>
+    
+    
+    
+    
+</div>
 
     </div>
     
-    
-    
-    
-    <div id="comment">
-        <div id="giscus-container" class="giscus"></div>
+    <div id="home-card">
+        <div id="card-style">
+    <div id="card-div">
+        <div class="avatar">
+            <img src="https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/avatar.jpg" alt="avatar" />
+        </div>
+        <div class="name">蹦蹦小圆帽</div>
+        <div class="description">
+            <p>蹦蹦小圆帽，轰轰雷大炮！</p>
+
+        </div>
+        
+        <div class="icon-links">
+            
+            <span class="icon-link">
+                <a target="_blank" rel="noopener" href="https://github.com/wanderer-fly">
+                    <i
+                        class="fa-brands fa-github fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+            <span class="icon-link">
+                <a target="_blank" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&uin=3379850248&site=qq&menu=yes">
+                    <i
+                        class="fa-brands fa-qq fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+            <span class="icon-link">
+                <a target="_blank" rel="noopener" href="https://twitter.com/WandererFly">
+                    <i
+                        class="fa-brands fa-twitter fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+            <span class="icon-link">
+                <a href="mailto:lukjeming@gmail.com">
+                    <i
+                        class="fa-solid fa-envelope fa-fw"
+                    ></i>
+                </a>
+            </span>
+            
+        </div>
+        
+        
     </div>
-    
-    
-    
+</div>
+
+    </div>
     
 </div>
 
@@ -284,29 +332,6 @@ Downloads ❯
             document.body.append(document.createRange().createContextualFragment(html));
         }
     </script>
-    
-    
-<script
-    src="https://giscus.app/client.js"
-    data-repo="argvchs/giscus-comments"
-    data-repo-id="R_kgDOI_uC-w"
-    data-category="Announcements"
-    data-category-id="DIC_kwDOI_uC-84CUToF"
-    data-mapping="pathname"
-    data-strict="1"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="https://static-argvchs.netlify.app/css/giscus.css"
-    data-lang="zh-CN"
-    crossorigin
-    async
-></script>
-
-
-
-
-
     
 </body>
 </html>
