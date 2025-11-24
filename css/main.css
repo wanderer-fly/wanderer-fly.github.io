@@ -1008,3 +1008,16 @@ pre[class*="language-"].line-numbers > code {
 pre[class*="language-"].line-numbers .line-numbers-rows {
     white-space: nowrap !important;
 }
+
+#content-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* background-image: url(""); */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+    z-index: -1;
+}

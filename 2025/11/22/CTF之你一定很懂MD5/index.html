@@ -58,6 +58,9 @@
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body>
     <div id="layout">
+        
+            <div id="content-background" ref="contentBackground" data-images="https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/wanderer_coffee.jpg,https://raw.githubusercontent.com/wanderer-fly/GitPic/refs/heads/main/kw.jpg"></div>
+        
         <transition name="fade">
             <div id="loading" v-show="loading">
                 <div id="loading-circle">
@@ -189,7 +192,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/MD5/" style="color: #ff7d73">
+                <a href="/tags/MD5/" style="color: #ffa2c4">
                     MD5
                 </a>
             </span>
@@ -316,7 +319,6 @@ e4da3b7fbbce2345d7772b0674a318d5
 cbb184dd8e05c9709e5dcaedaa0495cf
 '''
     for item in md5.split('\n'):
-        # print(item)
         for c in range(45, 126):
             unit = count_md5(chr(c))
             if unit != item:
